@@ -69,7 +69,6 @@ public class Portfolio {
             }
         }
 
-
         //checking if the transaction is a BUY transaction
         if (t.getType() == TransactionType.BUY) {
 
@@ -108,7 +107,6 @@ public class Portfolio {
             if (owenedAsset == null) {
                 throw new IllegalArgumentException("Not enough to sell");
             }
-
 
             //decrease the quantity of the owned asset by the amount sold in the transaction
             owenedAsset.setQuantity(owenedAsset.getQuantity() - t.getQuantity());
@@ -164,6 +162,19 @@ public class Portfolio {
         //Creating a new list of events
         copy.setEvents(new ArrayList<>(this.events));
         return copy;
+    }
+
+    public void removeAsset(Asset asset) {
+        if (asset == null) {
+            return;
+        }
+
+        for (Asset asset1 : assets) {
+            if (asset1.getSymbol().equalsIgnoreCase(asset.getSymbol()) && asset1.getClass().equals(asset.getClass())) {
+                assets.remove(asset1);
+                return;
+            }
+        }
     }
 
     public String getId() {

@@ -76,4 +76,17 @@ class PortfolioTest {
 
   }
 
+  @Test
+    void removeAsset() {
+      Portfolio portfolio2 = new Portfolio();
+
+      Stock owned = new Stock("AAPL", 5);
+      portfolio2.getAssets().add(owned);
+
+      Stock remove = new Stock("AAPL", 999);
+      portfolio2.removeAsset(remove);
+
+      assertEquals(0, portfolio2.getAssets().size());
+  }
+
   }
