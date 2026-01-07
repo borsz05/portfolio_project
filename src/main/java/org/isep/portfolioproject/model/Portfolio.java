@@ -118,12 +118,52 @@ public class Portfolio {
         transactions.add(t);
     }
 
+
+    //this method calculates the total value of the portfolio and returns a double
+    //the parameter currency c represents the currency the value should be calculated in
     public double calculateTotalValue(Currency c) {
-        return 0;
+        //a variael total is created to store the sum of all assets
+        //it starts at 0.0 because no assets have been added
+        double total = 0.0;
+
+        //a for each loop is used to go through each asset in the portfolio,
+        //assets in the list that contains all owned assets
+        for (Asset asset : assets) {
+
+            //for each asset, it get's current value in the given currency and adds that value to the total
+            total += asset.getCurrentValue(c);
+        }
+
+        //after all the assets have been looped through the method returns the total value of the portofolio
+        return total;
     }
 
-    public Portfolio clone() {
-        return null;
+
+    //https://docs.oracle.com/javase/tutorial/collections/interfaces/list.html
+    //https://www.geeksforgeeks.org/java/java-program-to-show-shallow-cloning-and-deep-cloning/
+    //https://stackoverflow.com/questions/52386697/does-copy-constructor-makes-a-shallow-copy
+    //aiming to copy a current portfolio object but creating a copy in own object
+    //the purpose is to be able to test, simulate, see changes and run calculations on the object without changing the original portfolio
+    public Portfolio copyObject() {
+
+        //creating a new portfolio object which will be the copy of the current portfolio
+        Portfolio copy = new Portfolio();
+
+        //copying the basic information from the original
+        copy.setId(this.id);
+        copy.setName(this.name);
+        copy.setDescription(this.description);
+        copy.setIsThirdPartyMonitor(this.isThirdPartyMonitor);
+
+        //creating a new list of assets, the list can be coped but the asset objects inside are shared
+        copy.setAssets(new ArrayList<>(this.assets));
+
+        //creating a new list of transactions
+        copy.setTransactions(new ArrayList<>(this.transactions));
+
+        //Creating a new list of events
+        copy.setEvents(new ArrayList<>(this.events));
+        return copy;
     }
 
     public String getId() {
