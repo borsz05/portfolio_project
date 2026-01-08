@@ -89,4 +89,29 @@ class PortfolioTest {
       assertEquals(0, portfolio2.getAssets().size());
   }
 
+  @Test
+    void removeAsset_null_noChange() {
+      Portfolio portfolio2 = new Portfolio();
+      portfolio2.getAssets().add(new Stock("AAPL", 5));
+      portfolio2.removeAsset(null);
+
+      assertEquals(1, portfolio2.getAssets().size());
+  }
+
+  @Test void removeAsset_notFound() {
+      Portfolio portfolio3 = new Portfolio();
+      portfolio3.getAssets().add(new Stock("APLL", 8));
+      portfolio3.removeAsset(new Stock("BLA", 1));
+
+      assertEquals(1, portfolio3.getAssets().size());
+  }
+
+    @Test void removeAsset_sameSymbol_notClass() {
+        Portfolio portfolio4 = new Portfolio();
+        portfolio4.getAssets().add(new Stock("APLL", 8));
+        portfolio4.removeAsset(new Crypto("APLL", 1, "aaaa"));
+
+        assertEquals(1, portfolio4.getAssets().size());
+    }
+
   }

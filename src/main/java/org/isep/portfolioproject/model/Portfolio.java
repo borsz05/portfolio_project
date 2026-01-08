@@ -39,6 +39,7 @@ public class Portfolio {
             throw new IllegalArgumentException("Invalid transaction");
         }
 
+
         //this if test checks if you are trying to buy or sell on a negative amount.
         //if your balance is less than or equal to 0 it will throw and give an error
         if (t.getQuantity() <= 0) {
@@ -105,12 +106,20 @@ public class Portfolio {
         if (t.getType() == TransactionType.SELL) {
             //if the asset is not owned, selling is made not allowed
             if (owenedAsset == null) {
-                throw new IllegalArgumentException("Not enough to sell");
+                throw new IllegalArgumentException("Asset not owned");
+            }
+
+            if (owenedAsset.getQuantity() < t.getQuantity()) {
+                throw new IllegalArgumentException("Not enough quantity to sell");
             }
 
             //decrease the quantity of the owned asset by the amount sold in the transaction
             owenedAsset.setQuantity(owenedAsset.getQuantity() - t.getQuantity());
 
+
+            if (owenedAsset.getQuantity() == 0 ) {
+                removeAsset(owenedAsset);
+            }
         }
         //add the transaction to the transaction history
         transactions.add(t);
@@ -169,12 +178,14 @@ public class Portfolio {
             return;
         }
 
-        for (Asset asset1 : assets) {
-            if (asset1.getSymbol().equalsIgnoreCase(asset.getSymbol()) && asset1.getClass().equals(asset.getClass())) {
-                assets.remove(asset1);
-                return;
-            }
-        }
+       for (int i = 0; i < assets.size(); i++) {
+           Asset asset1 = assets.get(i);
+
+           if (asset.getSymbol().equalsIgnoreCase(asset1.getSymbol()) && asset1.getClass().equals(asset.getClass())) {
+               assets.remove(i);
+               return;
+           }
+       }
     }
 
     public String getId() {
