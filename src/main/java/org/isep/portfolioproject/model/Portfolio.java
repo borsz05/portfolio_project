@@ -75,29 +75,9 @@ public class Portfolio {
 
             //if the asset is not already owned by the portfolio
             if(owenedAsset == null) {
-
-                //if the asset is not cryptocurrency
-                if(transactionAsset instanceof Crypto) {
-
-                    //cast the asset to Crypto to access crypto-specific information
-                    Crypto crypto = (Crypto) transactionAsset;
-
-                    //create a new Crypto object and add it to the portfolio holdings
-                    //the quantity is set to the amount bought in the transaction
-                    assets.add(new Crypto(crypto.getSymbol(),t.getQuantity(), crypto.getBlockchainAddress()));
-
-                    //if the asset is a stock
-                } else if (transactionAsset instanceof Stock) {
-
-                    //create a new Stock object and add it to the portfolio holding
-                    assets.add(new Stock(transactionAsset.getSymbol(), t.getQuantity()));
-                }
-
-                //if the asset is already owned by the portfolio
+                assets.add(transactionAsset.copyWithQuantity(t.getQuantity()));
             } else {
-
-                //increase the quantity of the existing asset by adding the transaction quantity
-                owenedAsset.setQuantity(owenedAsset.getQuantity() + t.getQuantity());
+                owenedAsset.buy(t.getQuantity());
             }
         }
 

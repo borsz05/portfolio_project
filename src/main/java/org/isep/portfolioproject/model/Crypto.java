@@ -19,6 +19,11 @@ public class Crypto extends Asset {
         return 0;
     }
 
+    @Override
+    public Asset copyWithQuantity(double quantity) {
+        return new Crypto(getSymbol(), quantity, blockchainAddress);
+    }
+
     public String getBlockchainAddress() {
         return blockchainAddress;
     }
