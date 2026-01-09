@@ -1,9 +1,37 @@
 package org.isep.portfolioproject;
 
 import javafx.application.Application;
+import org.isep.portfolioproject.model.Asset;
+import org.isep.portfolioproject.model.Portfolio;
+import org.isep.portfolioproject.model.Stock;
+import org.isep.portfolioproject.model.Transaction;
+import org.isep.portfolioproject.util.TransactionType;
+
+import java.io.IOException;
+import java.time.LocalDate;
 
 public class Launcher {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+
+        Portfolio p = new Portfolio();
+        p.setName("Test Portfolio");
+        p.setDescription("Just to test CSV");
+
+
+
+        Transaction transaction = new Transaction();
+        transaction.setId("O1");
+        transaction.setAsset(new Stock("AAPL", 0));
+        transaction.setQuantity(5);
+        transaction.setPriceAtPurchase(0.0);
+        transaction.setDate(LocalDate.now());
+        transaction.setType(TransactionType.BUY);
+
+        p.addTransaction(transaction);
+
+        p.writeToCsv();
+
         Application.launch(MainApplication.class, args);
+
     }
 }

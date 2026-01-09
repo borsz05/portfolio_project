@@ -1,10 +1,10 @@
 package org.isep.portfolioproject.model;
-
 import org.isep.portfolioproject.util.Currency;
 import org.isep.portfolioproject.util.TransactionType;
-
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.IOException;
 
 public class Portfolio {
 
@@ -168,6 +168,41 @@ public class Portfolio {
        }
     }
 
+    public void writeToCsv() throws IOException {
+        String fileName = "data/portfolio.csv";
+
+        try (FileWriter writer = new FileWriter(fileName)) {
+            writer.write("Portfolio name," + name + "\n");
+            writer.write("Description," + description + "\n");
+            writer.write("Third pard monitor" + isThirdPartyMonitor + "\n");
+            writer.write("\n");
+
+            writer.write("ASSETS /n");
+            writer.write("Type, Symbol, Quantity\n");
+
+                for (Asset asset : assets) {
+                    writer.write(
+                            asset.getClass().getSimpleName() + "," +
+                                    asset.getSymbol() + "," +
+                                    asset.getQuantity() + "n"
+                    );
+                }
+
+                writer.write("\n");
+
+                writer.write("TRANSACTIONS\n");
+                writer.write("Type, Asset, Quantity\n");
+
+                for (Transaction transaction : transactions) {
+                    writer.write(transaction.getType() + "," + transaction.getAsset().getSymbol() + "," + transaction.getQuantity() + "\n");
+                }
+
+            System.out.println("Csv file created");
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
     public String getId() {
         return id;
     }
@@ -223,6 +258,7 @@ public class Portfolio {
     public void setAssets(List<Asset> assets) {
         this.assets = assets;
     }
+
 
 
 }
