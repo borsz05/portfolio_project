@@ -106,8 +106,12 @@ class PortfolioTest {
       assertEquals(1, portfolio3.getAssets().size());
   }
 
+<<<<<<< HEAD
     @Test
     void removeAsset_sameSymbol_notClass() {
+=======
+    @Test void removeAsset_sameSymbol_notClass() {
+>>>>>>> origin/main
         Portfolio portfolio4 = new Portfolio();
         portfolio4.getAssets().add(new Stock("APLL", 8));
         portfolio4.removeAsset(new Crypto("APLL", 1, "aaaa"));
@@ -115,6 +119,7 @@ class PortfolioTest {
         assertEquals(1, portfolio4.getAssets().size());
     }
 
+<<<<<<< HEAD
 
     @Test
     void transferTo_moveMoneyCheckingToSavings() {
@@ -131,4 +136,6 @@ class PortfolioTest {
 
 
 
+=======
+>>>>>>> origin/main
   }
