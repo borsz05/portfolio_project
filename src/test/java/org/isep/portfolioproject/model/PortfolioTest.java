@@ -106,12 +106,29 @@ class PortfolioTest {
       assertEquals(1, portfolio3.getAssets().size());
   }
 
-    @Test void removeAsset_sameSymbol_notClass() {
+    @Test
+    void removeAsset_sameSymbol_notClass() {
         Portfolio portfolio4 = new Portfolio();
         portfolio4.getAssets().add(new Stock("APLL", 8));
         portfolio4.removeAsset(new Crypto("APLL", 1, "aaaa"));
 
         assertEquals(1, portfolio4.getAssets().size());
     }
+
+
+    @Test
+    void transferTo_moveMoneyCheckingToSavings() {
+      CheckingAccount checkingAccount = new CheckingAccount("NO123", "Sparebank1", "23", "check",Currency.EUR, 1000);
+
+      SavingAccount savingAccount = new SavingAccount("45", "Savings", Currency.EUR, 200);
+
+      checkingAccount.transferTo(savingAccount, 300);
+
+      assertEquals(700, checkingAccount.getBalance());
+      assertEquals(500, savingAccount.getBalance());
+    }
+
+
+
 
   }
