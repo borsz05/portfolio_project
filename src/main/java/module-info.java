@@ -7,6 +7,7 @@ module org.isep.portfolioproject {
     requires com.dlsc.formsfx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
+    requires com.fasterxml.jackson.databind;
 
     opens org.isep.portfolioproject to javafx.fxml;
     exports org.isep.portfolioproject;
