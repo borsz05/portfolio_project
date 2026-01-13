@@ -24,6 +24,7 @@ public class Transaction {
         this.type = type;
     }
 
+
     public String getId() {
         return id;
     }

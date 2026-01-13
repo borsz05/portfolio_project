@@ -1,0 +1,9 @@
+Portfolio name,Test Portfolio
+Description,Just to test CSV
+Third pard monitorfalse
+
+ASSETS /nType, Symbol, Quantity
+Stock,AAPL,5.0n
+TRANSACTIONS
+Type, Asset, Quantity
+BUY,AAPL,5.0

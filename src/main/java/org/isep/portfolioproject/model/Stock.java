@@ -15,4 +15,8 @@ public class Stock extends Asset {
     public double getCurrentValue(Currency c) {
         return 0;
     }
+
+    public Asset copyWithQuantity(double quantity) {
+        return new Stock(getSymbol(), quantity);
+    }
 }
