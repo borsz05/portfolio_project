@@ -2,5 +2,8 @@ package org.isep.portfolioproject.util;
 
 public enum TransactionType {
     BUY,
-    SELL
+    SELL,
+    DEPOSIT,
+    WITHDRAW,
+    TRANSFER
 }
