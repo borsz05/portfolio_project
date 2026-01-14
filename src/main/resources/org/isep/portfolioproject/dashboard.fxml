@@ -8,44 +8,97 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.isep.portfolioproject.controller.MainDashboard">
-   <children>
-      <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="800.0" prefWidth="1200.0">
-         <children>
-            <HBox layoutX="20" layoutY="20" spacing="10">
-               <children>
-                  <Label text="Portfolio:" />
-                  <ComboBox fx:id="portfolioCombo" prefWidth="160" />
-                  <Label prefWidth="50.0" text="Currency:" />
-                  <ComboBox fx:id="currencyCombo" prefWidth="110" />
-                  <Label text="Period:" />
-                  <ComboBox fx:id="periodCombo" prefWidth="130" />
-                  <Button fx:id="refreshButton" text="Refresh" />
-               </children>
-            </HBox>
-            <LineChart fx:id="valueLineChart" layoutX="20" layoutY="70" prefHeight="700" prefWidth="820" title="Portfolio Value">
-               <xAxis>
-                  <CategoryAxis label="Time" />
-               </xAxis>
-               <yAxis>
-                  <NumberAxis label="Value" />
-               </yAxis>
-            </LineChart>
-            <VBox layoutX="860" layoutY="70" prefHeight="700" prefWidth="320" spacing="10">
-               <children>
-                  <Label text="Allocation" />
-                  <PieChart fx:id="allocationPieChart" prefHeight="220" prefWidth="320" />
-                  <Label text="Events" />
-                  <ListView fx:id="eventsList" prefHeight="200" prefWidth="320" />
-                  <Label text="Whale Alerts" />
-                  <ListView fx:id="whaleAlertsList" prefHeight="200" prefWidth="320" />
-               </children>
-            </VBox>
-         </children>
-      </AnchorPane>
-   </children>
+<AnchorPane prefHeight="800.0" prefWidth="1200.0"
+            xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.isep.portfolioproject.controller.MainDashboard"
+            stylesheets="@dashboard.css">
+    <children>
+        <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <menus>
+                <Menu text="Actions">
+                    <MenuItem onAction="#openTransfer" text="Transfer" />
+                    <MenuItem onAction="#openBuySell" text="Buy / Sell" />
+                </Menu>
+            </menus>
+        </MenuBar>
+        <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="800.0" prefWidth="1200.0"
+                    AnchorPane.topAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+            <children>
+                <HBox layoutX="20" layoutY="40.0" spacing="10">
+                    <children>
+                        <Label text="Portfolio:" />
+                        <ComboBox fx:id="portfolioCombo" prefWidth="160" />
+                        <Label prefWidth="50.0" text="Currency:" />
+                        <ComboBox fx:id="currencyCombo" prefWidth="110" />
+                        <Label text="Period:" />
+                        <ComboBox fx:id="periodCombo" prefWidth="130" />
+                        <Button fx:id="refreshButton" text="Refresh" onAction="#onRefresh" />
+                    </children>
+                </HBox>
+                <HBox layoutX="20" layoutY="75.0" spacing="12">
+                    <children>
+                        <VBox prefWidth="190" styleClass="card">
+                            <children>
+                                <Label text="Total Value" styleClass="cardTitle" />
+                                <Label fx:id="totalValueLabel" text="--" styleClass="cardValue" />
+                            </children>
+                        </VBox>
+                        <VBox prefWidth="190" styleClass="card">
+                            <children>
+                                <Label text="Cash" styleClass="cardTitle" />
+                                <Label fx:id="cashLabel" text="--" styleClass="cardValue" />
+                            </children>
+                        </VBox>
+                        <VBox prefWidth="190" styleClass="card">
+                            <children>
+                                <Label text="Change" styleClass="cardTitle" />
+                                <Label fx:id="changeLabel" text="--" styleClass="cardValue" />
+                            </children>
+                        </VBox>
+                        <VBox prefWidth="190" styleClass="card">
+                            <children>
+                                <Label text="Unrealized P/L" styleClass="cardTitle" />
+                                <Label fx:id="plLabel" text="--" styleClass="cardValue" />
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+                <LineChart fx:id="valueLineChart"
+                           layoutX="20" layoutY="145.0"
+                           prefHeight="650" prefWidth="820"
+                           title="Portfolio Value"
+                           AnchorPane.topAnchor="145.0"
+                           AnchorPane.leftAnchor="20.0"
+                           AnchorPane.bottomAnchor="20.0"
+                           AnchorPane.rightAnchor="360.0">
+                    <xAxis>
+                        <CategoryAxis label="Time" />
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Value" />
+                    </yAxis>
+                </LineChart>
+                <VBox layoutX="860" layoutY="145.0" prefHeight="650" prefWidth="320" minWidth="320" maxWidth="320" spacing="10"
+                      AnchorPane.topAnchor="145.0"
+                      AnchorPane.rightAnchor="20.0"
+                      AnchorPane.bottomAnchor="20.0">
+                    <children>
+                        <Label text="Allocation" styleClass="sectionTitle" />
+                        <PieChart fx:id="allocationPieChart" prefHeight="220" prefWidth="320" />
+                        <Label text="Events" styleClass="sectionTitle" />
+                        <ListView fx:id="eventsList" prefHeight="200" prefWidth="320" />
+                        <Label text="Whale Alerts" styleClass="sectionTitle" />
+                        <ListView fx:id="whaleAlertsList" prefHeight="200" prefWidth="320" />
+                    </children>
+                </VBox>
+            </children>
+        </AnchorPane>
+    </children>
 </AnchorPane>
