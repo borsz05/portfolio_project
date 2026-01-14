@@ -46,7 +46,7 @@ public class LoginController {
                 String fileName = parts[0].trim();
                 String filePasswordHash = parts [2].trim();
 
-                if (fileName.equals(username) && filePasswordHash.equals(password)) {
+                if (fileName.equals(username) && filePasswordHash.equals(passwordHash)) {
                     ok = true;
                     break;
                 }
@@ -64,7 +64,7 @@ public class LoginController {
 
 
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/org/isep/portfolioproject/view/dashboard.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/org/isep/portfolioproject/dashboard.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Dashboard");
             stage.setScene(new Scene(root));
@@ -80,7 +80,7 @@ public class LoginController {
     @FXML
     private void handleOpenRegister() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/org/isep/portfolioproject/view/register.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/org/isep/portfolioproject/register.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Register");
             stage.setScene(new Scene(root));
