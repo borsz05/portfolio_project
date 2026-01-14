@@ -30,7 +30,7 @@
                     <children>
                         <Label text="Asset:" prefWidth="90" styleClass="fieldLabel"/>
                         <ComboBox fx:id="symbolCombo" prefWidth="280"/>
-
+                        <Button text="Fetch price" onAction="#onFetchPrice" />
                     </children>
                 </HBox>
 
@@ -38,7 +38,7 @@
                     <children>
                         <Label text="Amount (USD):" prefWidth="90" styleClass="fieldLabel"/>
                         <TextField fx:id="amountUsdField" prefWidth="280" promptText="e.g. 250.00"/>
-
+                        <Button text="Preview" onAction="#onPreview"/>
                     </children>
                 </HBox>
 
@@ -71,7 +71,7 @@
                 <Button text="BUY" onAction="#onBuy" styleClass="primaryBtn" prefWidth="120"/>
                 <Button text="SELL" onAction="#onSell" prefWidth="120"/>
                 <Pane HBox.hgrow="ALWAYS"/>
-
+                <Button text="Close" onAction="#onClose" />
             </children>
         </HBox>
 

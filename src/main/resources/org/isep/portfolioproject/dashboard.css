@@ -1,0 +1,36 @@
+.root {
+    -fx-font-size: 13px;
+    -fx-font-family: "Segoe UI";
+    -fx-background-color: #f6f7fb;
+}
+
+.label {
+    -fx-text-fill: #111827;
+}
+
+.sectionTitle {
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.card {
+    -fx-padding: 12;
+    -fx-spacing: 4;
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #e5e7eb;
+}
+
+.cardTitle {
+    -fx-text-fill: #6b7280;
+}
+
+.cardValue {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.button {
+    -fx-background-radius: 8;
+}

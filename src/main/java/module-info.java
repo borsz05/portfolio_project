@@ -10,5 +10,6 @@ module org.isep.portfolioproject {
     requires com.fasterxml.jackson.databind;
 
     opens org.isep.portfolioproject to javafx.fxml;
+    opens org.isep.portfolioproject.controller to javafx.fxml;
     exports org.isep.portfolioproject;
 }
