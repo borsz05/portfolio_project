@@ -30,6 +30,9 @@ public class User {
     }
 
     public void addWallet(CryptoWallet wallet) {
+        if (wallet == null) {
+            throw new IllegalArgumentException("Wallet can't be null");
+        }
         wallets.add(wallet);
     }
 

@@ -18,9 +18,6 @@ public class CryptoWallet{
     public String getId() {
         return id;
     }
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getLabel() {
         return label;
@@ -32,14 +29,11 @@ public class CryptoWallet{
     public String getWalletAddress() {
         return walletAddress;
     }
-    public void setWalletAddress(String walletAddress) {
-        this.walletAddress = walletAddress;
-    }
 
     public String getBlockchain() {
         return blockchain;
     }
     public void setBlockchain(String blockchain) {
-        this.blockchain = this.blockchain;
+        this.blockchain = blockchain;
     }
 }

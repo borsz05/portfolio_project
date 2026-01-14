@@ -1,6 +1,5 @@
 package org.isep.portfolioproject.model;
 import org.isep.portfolioproject.model.assets.Asset;
-import org.isep.portfolioproject.model.assets.Crypto;
 import org.isep.portfolioproject.model.assets.Stock;
 import org.isep.portfolioproject.service.PriceProvider;
 import org.isep.portfolioproject.util.Currency;

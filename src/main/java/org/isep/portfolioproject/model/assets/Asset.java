@@ -9,20 +9,18 @@ public abstract class Asset {
     //Bitcoin, Apple inc.
     protected String name;
 
-    protected Asset(String symbol, String name) {    }
+    protected Asset(String symbol, String name) {
+        this.symbol = symbol;
+        this.name = name;
+    }
 
     public abstract boolean isDivisible();
 
     public String getSymbol() {
         return symbol;
     }
-
     public String getName() {
         return name;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
     }
 
     @Override
