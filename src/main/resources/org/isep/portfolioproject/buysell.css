@@ -81,6 +81,17 @@
 .primaryBtn:hover {
     -fx-background-color: #3f7ae0;
 }
+/* fix combobox selected value text (display area) */
+.combo-box .list-cell,
+.combo-box .list-cell:selected{
+    -fx-text-fill:#f4f7ff;
+    -fx-background-color: transparent;
+}
+
+.combo-box .label{
+    -fx-text-fill:#f4f7ff;
+}
+
 
 /* bottom status */
 #statusLabel {
