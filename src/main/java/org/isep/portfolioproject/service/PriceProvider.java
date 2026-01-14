@@ -4,6 +4,6 @@ import org.isep.portfolioproject.util.Currency;
 
 public interface PriceProvider {
 
-    double getCurrentPrice(String sym, Currency c);
-
+    double getStockPrice(String sym, Currency c);
+    double getCryptoPrice(String sym, Currency c);
 }

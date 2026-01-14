@@ -1,10 +1,15 @@
 package org.isep.portfolioproject.model;
+import org.isep.portfolioproject.model.assets.Asset;
+import org.isep.portfolioproject.model.assets.Stock;
+import org.isep.portfolioproject.service.PriceProvider;
 import org.isep.portfolioproject.util.Currency;
 import org.isep.portfolioproject.util.TransactionType;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.io.IOException;
+import java.util.Map;
 
 public class Portfolio {
 
@@ -12,119 +17,75 @@ public class Portfolio {
     private String name;
     private String description;
     private boolean isThirdPartyMonitor;
+    private Currency referenceCurrency;
+
     private List<Transaction> transactions = new ArrayList<>();
     private List<Event> events = new ArrayList<>();
-    private List<Asset> assets = new ArrayList<>();
+    private Map<Asset, Position> positions = new HashMap<>();
 
     public Portfolio() {
     }
 
-    public Portfolio(String id, String name, String description, boolean isThirdPartyMonitor, List<Transaction> transactions, List<Event> events, List<Asset> assets) {
+    public Portfolio(String id, String name, String description, boolean isThirdPartyMonitor, Currency referenceCurrency) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.isThirdPartyMonitor = isThirdPartyMonitor;
-        this.transactions = transactions;
-        this.events = events;
-        this.assets = assets;
+        this.referenceCurrency = referenceCurrency;
     }
 
+    public Position getOrCreatePosition(Asset asset) {
+        // If the asset does not yet exist in the portfolio,
+        // this creates a new Position for it and store it in the map.
+        // https://docs.oracle.com/javase/8/docs/api/java/util/Map.html#computeIfAbsent-K-java.util.function.Function-
+        return positions.computeIfAbsent(asset, Position::new);
+    }
 
     //creating a method that handles one trade (a buy or a sell) and updates what you currenctly own (assets) and history of trades (transactions)
-    public void addTransaction(Transaction t) {
-        //first a if test is created to check if the transcation is actually there or valid, this if test
-        //checks if the transaction received shows what asset and if it's buy or sell.
-        //if it's not it will throw and show and error
-        if (t == null || t.getAsset() == null || t.getType() == null) {
-            throw new IllegalArgumentException("Invalid transaction");
-        }
+    public void apply(Transaction tx) {
+        if (tx == null) throw new IllegalArgumentException("Transaction is null");
 
+        if (tx.getType() == TransactionType.BUY || tx.getType() == TransactionType.SELL) {
+            Asset asset = tx.getAsset();
+            if (asset == null) throw new IllegalArgumentException("Asset missing");
+            if (tx.getQuantity() <= 0) throw new IllegalArgumentException("Quantity must be positive");
 
-        //this if test checks if you are trying to buy or sell on a negative amount.
-        //if your balance is less than or equal to 0 it will throw and give an error
-        if (t.getQuantity() <= 0) {
-            throw new IllegalArgumentException("Quantity must be positive");
-        }
+            Position position = getOrCreatePosition(asset);
 
-        //getting the information of the asset that is stored inside the transaction
-        Asset transactionAsset = t.getAsset();
-        //a local variale used to store a reference to a matching asset in the portifolio, it's set to null as default (not found yet)
-        Asset owenedAsset = null;
-
-
-        //this for loop is looping through the current holdings of the portofolio
-        //it checks each asset one by one
-        for (Asset asset : assets ) {
-           //checking if the current asset matches the asset from transaction
-            //first it will compare symbol(example: BTC), ingoring case
-            //then it will compare the class type (crypto or stock)
-            //both conditions must be true for it to be consideres the same asset
-            if (asset.getSymbol().equalsIgnoreCase(transactionAsset.getSymbol())
-                && asset.getClass().equals(transactionAsset.getClass())) {
-
-                //if a matching asset is found, a reference to it is stored
-                owenedAsset = asset;
-
-                //stopping the loop when the asset has been found
-                break;
-            }
-        }
-
-        //checking if the transaction is a BUY transaction
-        if (t.getType() == TransactionType.BUY) {
-
-            //if the asset is not already owned by the portfolio
-            if(owenedAsset == null) {
-                assets.add(transactionAsset.copyWithQuantity(t.getQuantity()));
+            if (tx.getType() == TransactionType.BUY) {
+                position.applyBuy(tx.getQuantity(), tx.getPrice());
             } else {
-                owenedAsset.buy(t.getQuantity());
+                position.applySell(tx.getQuantity());
+                if (position.getQuantity() == 0) {
+                    positions.remove(asset);
+                }
             }
         }
 
-
-        //check if the transaction is a SELL
-        if (t.getType() == TransactionType.SELL) {
-            //if the asset is not owned, selling is made not allowed
-            if (owenedAsset == null) {
-                throw new IllegalArgumentException("Asset not owned");
-            }
-
-            if (owenedAsset.getQuantity() < t.getQuantity()) {
-                throw new IllegalArgumentException("Not enough quantity to sell");
-            }
-
-            //decrease the quantity of the owned asset by the amount sold in the transaction
-            owenedAsset.setQuantity(owenedAsset.getQuantity() - t.getQuantity());
-
-
-            if (owenedAsset.getQuantity() == 0 ) {
-                removeAsset(owenedAsset);
-            }
-        }
-        //add the transaction to the transaction history
-        transactions.add(t);
+        transactions.add(tx);
     }
-
 
     //this method calculates the total value of the portfolio and returns a double
     //the parameter currency c represents the currency the value should be calculated in
-    public double calculateTotalValue(Currency c) {
+    public double calculateTotalValue(Currency c, PriceProvider priceProvider) {
         //a variael total is created to store the sum of all assets
         //it starts at 0.0 because no assets have been added
         double total = 0.0;
 
-        //a for each loop is used to go through each asset in the portfolio,
-        //assets in the list that contains all owned assets
-        for (Asset asset : assets) {
+        for (Position position : positions.values()) {
+            Asset asset = position.getAsset();
 
-            //for each asset, it get's current value in the given currency and adds that value to the total
-            total += asset.getCurrentValue(c);
+            double price;
+            if (asset instanceof Stock)
+                price = priceProvider.getStockPrice(asset.getSymbol(), c);
+            else
+                price = priceProvider.getCryptoPrice(asset.getSymbol(), c);
+
+            total += position.getQuantity() * price;
         }
 
-        //after all the assets have been looped through the method returns the total value of the portofolio
         return total;
     }
-
 
     //https://docs.oracle.com/javase/tutorial/collections/interfaces/list.html
     //https://www.geeksforgeeks.org/java/java-program-to-show-shallow-cloning-and-deep-cloning/
@@ -141,31 +102,29 @@ public class Portfolio {
         copy.setName(this.name);
         copy.setDescription(this.description);
         copy.setIsThirdPartyMonitor(this.isThirdPartyMonitor);
+        copy.setReferenceCurrency(this.referenceCurrency);
 
-        //creating a new list of assets, the list can be coped but the asset objects inside are shared
-        copy.setAssets(new ArrayList<>(this.assets));
-
-        //creating a new list of transactions
         copy.setTransactions(new ArrayList<>(this.transactions));
-
-        //Creating a new list of events
         copy.setEvents(new ArrayList<>(this.events));
-        return copy;
-    }
 
-    public void removeAsset(Asset asset) {
-        if (asset == null) {
-            return;
+        Map<Asset, Position> positionsCopy = new HashMap<>();
+
+        for (Asset asset : this.positions.keySet()) {
+
+            Position original = this.positions.get(asset);
+
+            Position cloned = new Position(asset);
+
+            if (original.getQuantity() > 0) {
+                cloned.applyBuy(original.getQuantity(), original.getAvgBuyPrice());
+            }
+
+            positionsCopy.put(asset, cloned);
         }
 
-       for (int i = 0; i < assets.size(); i++) {
-           Asset asset1 = assets.get(i);
+        copy.setPositions(positionsCopy);
 
-           if (asset.getSymbol().equalsIgnoreCase(asset1.getSymbol()) && asset1.getClass().equals(asset.getClass())) {
-               assets.remove(i);
-               return;
-           }
-       }
+        return copy;
     }
 
     public void writeToCsv() throws IOException {
@@ -174,91 +133,89 @@ public class Portfolio {
         try (FileWriter writer = new FileWriter(fileName)) {
             writer.write("Portfolio name," + name + "\n");
             writer.write("Description," + description + "\n");
-            writer.write("Third pard monitor" + isThirdPartyMonitor + "\n");
+            writer.write("Third party monitor," + isThirdPartyMonitor + "\n");
+            writer.write("Reference currency," + referenceCurrency + "\n");
             writer.write("\n");
 
-            writer.write("ASSETS /n");
-            writer.write("Type, Symbol, Quantity\n");
+            writer.write("POSITIONS\n");
+            writer.write("Type,Symbol,Quantity,AvgBuyPrice\n");
 
-                for (Asset asset : assets) {
-                    writer.write(
-                            asset.getClass().getSimpleName() + "," +
-                                    asset.getSymbol() + "," +
-                                    asset.getQuantity() + "n"
-                    );
-                }
+            for (Position p : positions.values()) {
+                writer.write(
+                        p.getAsset().getClass().getSimpleName() + "," +
+                                p.getAsset().getSymbol() + "," +
+                                p.getQuantity() + "," +
+                                p.getAvgBuyPrice() + "\n"
+                );
+            }
 
-                writer.write("\n");
+            writer.write("\n");
+            writer.write("TRANSACTIONS\n");
+            writer.write("Type,Asset,Quantity,UnitPrice\n");
 
-                writer.write("TRANSACTIONS\n");
-                writer.write("Type, Asset, Quantity\n");
-
-                for (Transaction transaction : transactions) {
-                    writer.write(transaction.getType() + "," + transaction.getAsset().getSymbol() + "," + transaction.getQuantity() + "\n");
-                }
+            for (Transaction tx : transactions) {
+                String sym = (tx.getAsset() != null) ? tx.getAsset().getSymbol() : "";
+                writer.write(
+                        tx.getType() + "," +
+                                sym + "," +
+                                tx.getQuantity() + "," +
+                                tx.getPrice() + "\n"
+                );
+            }
 
             System.out.println("Csv file created");
-        } catch (IOException exception) {
-            exception.printStackTrace();
         }
     }
 
-    public String getId() {
-        return id;
-    }
 
+    //SETTERS
     public void setId(String id) {
         this.id = id;
     }
-
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
-
-    public String getDescription() {
-        return description;
-    }
-
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public boolean isIsThirdPartyMonitor() {
-        return isThirdPartyMonitor;
-    }
-
     public void setIsThirdPartyMonitor(boolean isThirdPartyMonitor) {
         this.isThirdPartyMonitor = isThirdPartyMonitor;
     }
-
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
+    public void setReferenceCurrency(Currency referenceCurrency) { this.referenceCurrency = referenceCurrency; }
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
     }
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+    public void setPositions(Map<Asset, Position> positions) {
+        this.positions = positions;
+    }
+
+
+    //GETTERS
+    public String getId() {
+        return id;
+    }
+    public String getName() {
+        return name;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public boolean getIsThirdPartyMonitor() {
+        return isThirdPartyMonitor;
+    }
+    public Currency getReferenceCurrency() { return referenceCurrency; }
 
     public List<Event> getEvents() {
         return events;
     }
-
-    public void setEvents(List<Event> events) {
-        this.events = events;
+    public Map<Asset, Position> getPositions() {
+        return positions;
     }
-
-    public List<Asset> getAssets() {
-        return assets;
+    public List<Transaction> getTransactions(){
+        return transactions;
     }
-
-    public void setAssets(List<Asset> assets) {
-        this.assets = assets;
-    }
-
-
-
 }

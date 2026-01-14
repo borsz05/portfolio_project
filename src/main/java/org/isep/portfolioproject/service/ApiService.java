@@ -13,14 +13,13 @@ import java.util.List;
 
 public class ApiService implements PriceProvider {
 
-private static final String API_KEY = "MU1577NQFWWV2J2J";
-
+    private static final String API_KEY = "MU1577NQFWWV2J2J";
 
     public ApiService() {
     }
 
     @Override
-    public double getCurrentPrice(String sym, Currency c) {
+    public double getStockPrice(String sym, Currency c) {
         try {
             String urlStr =
                     "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol="
@@ -57,45 +56,43 @@ private static final String API_KEY = "MU1577NQFWWV2J2J";
     }
 
     public double getCryptoPrice(String symbol, Currency c) {
-    try {
-        String urlStr =
-                "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE"
-                        + "&from_currency=" + symbol.toUpperCase()
-                        + "&to_currency=" + c.name()
-                        + "&apikey=" + API_KEY;
+        try {
+            String urlStr =
+                    "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE"
+                            + "&from_currency=" + symbol.toUpperCase()
+                            + "&to_currency=" + c.name()
+                            + "&apikey=" + API_KEY;
 
-        URL url = new URL(urlStr);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
+            URL url = new URL(urlStr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
 
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(conn.getInputStream())
-        );
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream())
+            );
 
-        StringBuilder response = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            response.append(line);
-        }
-        reader.close();
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
 
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(response.toString());
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(response.toString());
 
-        JsonNode rateObj = root.get("Realtime Currency Exchange Rate");
-        if (rateObj == null || rateObj.isEmpty()) {
-            //what we get back
-            throw new RuntimeException(response.toString());
-        }
+            JsonNode rateObj = root.get("Realtime Currency Exchange Rate");
+            if (rateObj == null || rateObj.isEmpty()) {
+                //what we get back
+                throw new RuntimeException(response.toString());
+            }
 
-        return rateObj.get("5. Exchange Rate").asDouble();
+            return rateObj.get("5. Exchange Rate").asDouble();
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to fetch crypto price for " + symbol, e);
         }
     }
-
-
 
     public List<Transaction> importFromExchange(String exch) {
         return null;

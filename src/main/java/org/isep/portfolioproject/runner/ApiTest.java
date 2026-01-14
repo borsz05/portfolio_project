@@ -8,7 +8,7 @@ public class ApiTest {
         //we can only test 1 in one running ,bc the limit
         ApiService api = new ApiService();
 
-        //double aapl = api.getCurrentPrice("AAPL", Currency.USD);
+        //double aapl = api.getStockPrice("AAPL", Currency.USD);
         //System.out.println("AAPL price = " + aapl);
 
         double btc = api.getCryptoPrice("BTC", Currency.USD);
