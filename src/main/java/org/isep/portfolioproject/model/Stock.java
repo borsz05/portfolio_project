@@ -13,7 +13,7 @@ public class Stock extends Asset {
 
     @Override
     public double getCurrentValue(Currency c) {
-        return 0;
+        return super.getCurrentValue(c);
     }
 
     public Asset copyWithQuantity(double quantity) {
