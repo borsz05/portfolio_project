@@ -9,6 +9,7 @@ import org.isep.portfolioproject.util.TransactionType;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
@@ -29,7 +30,7 @@ class PortfolioTest {
                 new Stock("AAPL", 0),
                 10,
                 150,
-                LocalDate.now(),
+                LocalDateTime.now(),
                 TransactionType.BUY
         );
 
