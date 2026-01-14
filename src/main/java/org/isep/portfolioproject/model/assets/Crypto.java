@@ -1,7 +1,4 @@
-package org.isep.portfolioproject.model;
-
-import org.isep.portfolioproject.service.ApiService;
-import org.isep.portfolioproject.util.Currency;
+package org.isep.portfolioproject.model.assets;
 
 public class Crypto extends Asset {
 

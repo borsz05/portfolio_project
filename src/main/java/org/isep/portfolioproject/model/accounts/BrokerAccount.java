@@ -1,4 +1,4 @@
-package org.isep.portfolioproject.model;
+package org.isep.portfolioproject.model.accounts;
 
 import org.isep.portfolioproject.util.Currency;
 

@@ -1,5 +1,9 @@
 package org.isep.portfolioproject.model;
 
+import org.isep.portfolioproject.model.accounts.CheckingAccount;
+import org.isep.portfolioproject.model.accounts.SavingAccount;
+import org.isep.portfolioproject.model.assets.Crypto;
+import org.isep.portfolioproject.model.assets.Stock;
 import org.isep.portfolioproject.util.Currency;
 import org.isep.portfolioproject.util.TransactionType;
 import org.junit.jupiter.api.Test;

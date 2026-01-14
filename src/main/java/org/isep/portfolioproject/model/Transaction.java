@@ -1,5 +1,6 @@
 package org.isep.portfolioproject.model;
 
+import org.isep.portfolioproject.model.assets.Asset;
 import org.isep.portfolioproject.util.TransactionType;
 import java.time.LocalDate;
 

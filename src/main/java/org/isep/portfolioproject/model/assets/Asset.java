@@ -1,6 +1,4 @@
-package org.isep.portfolioproject.model;
-
-import org.isep.portfolioproject.util.Currency;
+package org.isep.portfolioproject.model.assets;
 
 public abstract class Asset {
 

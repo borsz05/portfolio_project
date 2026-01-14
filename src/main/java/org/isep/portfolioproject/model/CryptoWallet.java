@@ -1,8 +1,9 @@
 package org.isep.portfolioproject.model;
 
+import org.isep.portfolioproject.model.accounts.Account;
 import org.isep.portfolioproject.util.Currency;
 
-public class CryptoWallet extends Account{
+public class CryptoWallet extends Account {
 
 
     private String walletAddress;

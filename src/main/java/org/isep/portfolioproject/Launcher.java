@@ -1,9 +1,8 @@
 package org.isep.portfolioproject;
 
 import javafx.application.Application;
-import org.isep.portfolioproject.model.Asset;
 import org.isep.portfolioproject.model.Portfolio;
-import org.isep.portfolioproject.model.Stock;
+import org.isep.portfolioproject.model.assets.Stock;
 import org.isep.portfolioproject.model.Transaction;
 import org.isep.portfolioproject.util.TransactionType;
 
