@@ -4,7 +4,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-import  java.io.*;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class RegisterController {
 
@@ -13,24 +16,19 @@ public class RegisterController {
     @FXML private PasswordField passwordField;
     @FXML private PasswordField confirmPasswordField;
 
-
     @FXML
     private void handleCreate() {
-        String name = nameField.getText();
-        String lastname = lastnameField.getText();
+        String name = nameField.getText().trim();
+        String lastname = lastnameField.getText().trim();
         String password = passwordField.getText();
         String password2 = confirmPasswordField.getText();
 
-        if(name.isEmpty() || lastname.isEmpty() || password.isEmpty() || password2.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Fill all fields");
-            alert.showAndWait();
+        if (name.isEmpty() || lastname.isEmpty() || password.isEmpty() || password2.isEmpty()) {
+            new Alert(Alert.AlertType.ERROR, "Fill all fields").showAndWait();
             return;
         }
 
-        if(!password.equals(password2)) {
+        if (!password.equals(password2)) {
             new Alert(Alert.AlertType.ERROR, "Make sure passwords match").showAndWait();
             return;
         }
@@ -38,12 +36,13 @@ public class RegisterController {
         File file = new File("data/logindetails.csv");
         boolean newFile = !file.exists() || file.length() == 0;
 
+        String passwordHash = sha256(password);
+
         try (PrintWriter out = new PrintWriter(new FileWriter(file, true))) {
             if (newFile) {
-                out.println("name,lastname,password");
+                out.println("name,lastname,passwordHash");
             }
-
-            out.println(name + "," + lastname + "," + password);
+            out.println(name + "," + lastname + "," + passwordHash);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -51,8 +50,19 @@ public class RegisterController {
             return;
         }
 
-        new Alert(Alert.AlertType.INFORMATION, "Account created");
-
+        new Alert(Alert.AlertType.INFORMATION, "Account created").showAndWait();
         nameField.getScene().getWindow().hide();
+    }
+
+    private static String sha256(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(input.getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hash) sb.append(String.format("%02x", b));
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
