@@ -1,5 +1,6 @@
 package org.isep.portfolioproject.model;
 
+import org.isep.portfolioproject.service.ApiService;
 import org.isep.portfolioproject.util.Currency;
 
 public abstract class Asset {
@@ -41,7 +42,11 @@ public abstract class Asset {
 
     public abstract Asset copyWithQuantity(double quantity);
 
-    public abstract double getCurrentValue(Currency c);
+    public double getCurrentValue(Currency c){
+        ApiService api = new ApiService();
+        double price = api.getCurrentPrice(symbol, c);
+        return price * quantity;
+    }
 
     public String getSymbol() {
         return symbol;

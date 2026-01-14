@@ -1,5 +1,6 @@
 package org.isep.portfolioproject.model;
 
+import org.isep.portfolioproject.service.ApiService;
 import org.isep.portfolioproject.util.Currency;
 
 public class Crypto extends Asset {
@@ -16,7 +17,9 @@ public class Crypto extends Asset {
 
     @Override
     public double getCurrentValue(Currency c) {
-        return 0;
+        ApiService api = new ApiService();
+        double price = api.getCryptoPrice(getSymbol(), c);
+        return price * getQuantity();
     }
 
     @Override
