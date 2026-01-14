@@ -11,6 +11,9 @@ import javafx.stage.Stage;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class LoginController {
 
@@ -28,6 +31,7 @@ public class LoginController {
         }
 
         boolean ok = false;
+        String passwordHash = sha256(password);
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader("data/logindetails.csv"))) {
 
@@ -40,9 +44,9 @@ public class LoginController {
                 if (parts.length < 3) continue;
 
                 String fileName = parts[0].trim();
-                String filePassword = parts [2].trim();
+                String filePasswordHash = parts [2].trim();
 
-                if (fileName.equals(username) && filePassword.equals(password)) {
+                if (fileName.equals(username) && filePasswordHash.equals(password)) {
                     ok = true;
                     break;
                 }
@@ -60,7 +64,7 @@ public class LoginController {
 
 
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/org/isep/portfolioproject/view/mainDashboard.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/org/isep/portfolioproject/view/dashboard.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Dashboard");
             stage.setScene(new Scene(root));
@@ -76,7 +80,7 @@ public class LoginController {
     @FXML
     private void handleOpenRegister() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/org/isep/portfolioproject/view/register.fmxl"));
+            Parent root = FXMLLoader.load(getClass().getResource("/org/isep/portfolioproject/view/register.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Register");
             stage.setScene(new Scene(root));
@@ -84,6 +88,19 @@ public class LoginController {
         } catch (Exception e) {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Could not open register view").showAndWait();
+        }
+    }
+
+    // SHA-256 hash
+    private static String sha256(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(input.getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hash) sb.append(String.format("%02x", b));
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
     }
 }
