@@ -1,81 +1,125 @@
-<?xml version="1.0" encoding="UTF-8"?>
+.root {
+    -fx-font-family: "Segoe UI", System;
+    -fx-background-color: #0e1324;
+    -fx-text-fill: #e9ecf5;
+}
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+/* title */
+.title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+}
 
-<VBox spacing="12" prefWidth="460" prefHeight="320"
-      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.isep.portfolioproject.controller.BuySellController"
-      stylesheets="@buysell.css">
+/* main card */
+.card {
+    -fx-background-color: rgba(255,255,255,0.05);
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-padding: 12;
+}
 
-    <padding>
-        <Insets top="14" right="14" bottom="14" left="14"/>
-    </padding>
+/* left labels */
+.fieldLabel {
+    -fx-text-fill: rgba(233,236,245,0.75);
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
 
-    <children>
-        <Label text="Buy / Sell" styleClass="title"/>
+/* calculated values */
+.value {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+}
 
-        <VBox spacing="10" styleClass="card">
-            <children>
+.muted {
+    -fx-text-fill: rgba(233,236,245,0.55);
+    -fx-font-size: 12px;
+}
 
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <children>
-                        <Label text="Type:" prefWidth="90" styleClass="fieldLabel"/>
-                        <ComboBox fx:id="assetTypeCombo" prefWidth="280"/>
-                    </children>
-                </HBox>
+/* inputs */
+.combo-box,
+.text-field {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: rgba(255,255,255,0.14);
+    -fx-text-fill: #f4f7ff;
+    -fx-padding: 6 10;
+    -fx-pref-height: 32;
+}
 
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <children>
-                        <Label text="Asset:" prefWidth="90" styleClass="fieldLabel"/>
-                        <ComboBox fx:id="symbolCombo" prefWidth="280"/>
-                        <Button text="Fetch price" onAction="#onFetchPrice" />
-                    </children>
-                </HBox>
+.combo-box:focused,
+.text-field:focused {
+    -fx-border-color: #4f8cff;
+}
 
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <children>
-                        <Label text="Amount (USD):" prefWidth="90" styleClass="fieldLabel"/>
-                        <TextField fx:id="amountUsdField" prefWidth="280" promptText="e.g. 250.00"/>
-                        <Button text="Preview" onAction="#onPreview"/>
-                    </children>
-                </HBox>
+/* small action buttons inside rows (fetch / preview / close) */
+.button {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-background-color: rgba(255,255,255,0.10);
+    -fx-text-fill: #eef2ff;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-padding: 6 12;
+}
 
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <children>
-                        <Label text="Price:" prefWidth="90" styleClass="fieldLabel"/>
-                        <Label fx:id="priceLabel" text="--" styleClass="value"/>
-                    </children>
-                </HBox>
+.button:hover {
+    -fx-background-color: rgba(255,255,255,0.16);
+}
 
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <children>
-                        <Label text="Qty:" prefWidth="90" styleClass="fieldLabel"/>
-                        <Label fx:id="qtyLabel" text="--" styleClass="value"/>
-                    </children>
-                </HBox>
+/* primary action */
+.primaryBtn {
+    -fx-background-color: #4f8cff;
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+}
 
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <children>
-                        <Label text="Broker cash:" prefWidth="90" styleClass="fieldLabel"/>
-                        <Label fx:id="brokerBalanceLabel" text="--" styleClass="muted"/>
-                    </children>
-                </HBox>
+.primaryBtn:hover {
+    -fx-background-color: #3f7ae0;
+}
 
-            </children>
-        </VBox>
+/* bottom status */
+#statusLabel {
+    -fx-text-fill: rgba(233,236,245,0.85);
+    -fx-font-size: 12px;
+}
+/* combobox popup – dark dropdown */
 
-        <HBox spacing="10">
-            <children>
-                <Button text="BUY" onAction="#onBuy" styleClass="primaryBtn" prefWidth="120"/>
-                <Button text="SELL" onAction="#onSell" prefWidth="120"/>
-                <Pane HBox.hgrow="ALWAYS"/>
-                <Button text="Close" onAction="#onClose" />
-            </children>
-        </HBox>
+.combo-box-popup .list-view {
+    -fx-background-color: #141a2e;
+    -fx-border-color: rgba(255,255,255,0.15);
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 4;
+}
 
-        <Label fx:id="statusLabel" wrapText="true"/>
+/* dropdown items */
+.combo-box-popup .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-padding: 8 12;
+}
 
-    </children>
-</VBox>
+/* hover */
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: rgba(79,140,255,0.35);
+    -fx-background-radius: 6;
+}
+
+/* selected item */
+.combo-box-popup .list-cell:selected {
+    -fx-background-color: #4f8cff;
+    -fx-text-fill: #ffffff;
+    -fx-background-radius: 6;
+}
+
+/* focused combobox itself */
+.combo-box:focused {
+    -fx-border-color: #4f8cff;
+}
+
