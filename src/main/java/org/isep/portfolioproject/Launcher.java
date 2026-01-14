@@ -8,6 +8,7 @@ import org.isep.portfolioproject.util.TransactionType;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Launcher {
     public static void main(String[] args) throws IOException {
@@ -22,8 +23,8 @@ public class Launcher {
         transaction.setId("O1");
         transaction.setAsset(new Stock("AAPL", 0));
         transaction.setQuantity(5);
-        transaction.setPriceAtPurchase(0.0);
-        transaction.setDate(LocalDate.now());
+        transaction.setPrice(0.0);
+        transaction.setDate(LocalDateTime.now());
         transaction.setType(TransactionType.BUY);
 
         p.addTransaction(transaction);

@@ -4,40 +4,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-private String id;
-private String username;
-private String password;
-private List<Portfolio> portfolios = new ArrayList<>();
+    private String id;
+    private String username;
+    private String password;
+    private List<Portfolio> portfolios = new ArrayList<>();
+    private List<CryptoWallet> wallets = new ArrayList<>();
 
 
-public User(String id, String username, String password) {
-    this.id = id;
-    this.username = username;
-    this.password = password;
-}
-
-public void addPortfolio(Portfolio portfolio) {
-    if (portfolio == null) {
-        throw new IllegalArgumentException("Portfolio can't be null");
+    public User(String id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
     }
 
-    portfolios.add(portfolio);
-}
+    public void addPortfolio(Portfolio portfolio) {
+        if (portfolio == null) {
+            throw new IllegalArgumentException("Portfolio can't be null");
+        }
 
-public List<Portfolio> getPortfolios() {
-    return new ArrayList<>(portfolios);
-}
+        portfolios.add(portfolio);
+    }
 
-public String getId() {
-    return id;
-}
+    public List<Portfolio> getPortfolios() {
+        return new ArrayList<>(portfolios);
+    }
 
-public String getUsername() {
-    return username;
-}
+    public void addWallet(CryptoWallet wallet) {
+        wallets.add(wallet);
+    }
 
-public String getPassword() {
-    return password;
-}
+    public List<CryptoWallet> getWallets() {
+        return new ArrayList<>(wallets);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 
 }
