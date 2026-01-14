@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" prefWidth="360" prefHeight="260"
+      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.isep.portfolioproject.controller.BuySellController">
+
+    <children>
+        <Label text="Buy / Sell" style="-fx-font-size: 18;" />
+
+        <HBox spacing="10">
+            <children>
+                <Label text="Type:" prefWidth="60"/>
+                <ComboBox fx:id="assetTypeCombo" prefWidth="250"/>
+            </children>
+        </HBox>
+
+        <HBox spacing="10">
+            <children>
+                <Label text="Symbol:" prefWidth="60"/>
+                <TextField fx:id="symbolField" prefWidth="250"/>
+            </children>
+        </HBox>
+
+        <HBox spacing="10">
+            <children>
+                <Label text="Qty:" prefWidth="60"/>
+                <TextField fx:id="quantityField" prefWidth="250"/>
+            </children>
+        </HBox>
+
+        <HBox spacing="10">
+            <children>
+                <Button text="BUY" onAction="#onBuy" prefWidth="120"/>
+                <Button text="SELL" onAction="#onSell" prefWidth="120"/>
+            </children>
+        </HBox>
+
+        <Label fx:id="statusLabel"/>
+    </children>
+</VBox>
