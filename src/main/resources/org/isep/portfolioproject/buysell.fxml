@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="12" prefWidth="460" prefHeight="320"
+      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.isep.portfolioproject.controller.BuySellController"
+      stylesheets="@buysell.css">
+
+    <padding>
+        <Insets top="14" right="14" bottom="14" left="14"/>
+    </padding>
+
+    <children>
+        <Label text="Buy / Sell" styleClass="title"/>
+
+        <VBox spacing="10" styleClass="card">
+            <children>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <children>
+                        <Label text="Type:" prefWidth="90" styleClass="fieldLabel"/>
+                        <ComboBox fx:id="assetTypeCombo" prefWidth="280"/>
+                    </children>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <children>
+                        <Label text="Asset:" prefWidth="90" styleClass="fieldLabel"/>
+                        <ComboBox fx:id="symbolCombo" prefWidth="280"/>
+
+                    </children>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <children>
+                        <Label text="Amount (USD):" prefWidth="90" styleClass="fieldLabel"/>
+                        <TextField fx:id="amountUsdField" prefWidth="280" promptText="e.g. 250.00"/>
+
+                    </children>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <children>
+                        <Label text="Price:" prefWidth="90" styleClass="fieldLabel"/>
+                        <Label fx:id="priceLabel" text="--" styleClass="value"/>
+                    </children>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <children>
+                        <Label text="Qty:" prefWidth="90" styleClass="fieldLabel"/>
+                        <Label fx:id="qtyLabel" text="--" styleClass="value"/>
+                    </children>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <children>
+                        <Label text="Broker cash:" prefWidth="90" styleClass="fieldLabel"/>
+                        <Label fx:id="brokerBalanceLabel" text="--" styleClass="muted"/>
+                    </children>
+                </HBox>
+
+            </children>
+        </VBox>
+
+        <HBox spacing="10">
+            <children>
+                <Button text="BUY" onAction="#onBuy" styleClass="primaryBtn" prefWidth="120"/>
+                <Button text="SELL" onAction="#onSell" prefWidth="120"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+
+            </children>
+        </HBox>
+
+        <Label fx:id="statusLabel" wrapText="true"/>
+
+    </children>
+</VBox>
