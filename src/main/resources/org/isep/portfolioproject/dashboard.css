@@ -1,36 +1,188 @@
-.root {
-    -fx-font-size: 13px;
-    -fx-font-family: "Segoe UI";
-    -fx-background-color: #f6f7fb;
+.root{
+    -fx-font-family:"Segoe UI",System;
+    -fx-font-size:13px;
+    -fx-background-color:#0e1324;
 }
 
-.label {
-    -fx-text-fill: #111827;
+/* top menu */
+.menu-bar{
+    -fx-background-color:#0b1020;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-width:0 0 1 0;
+}
+.menu-bar .label{
+    -fx-text-fill:#eef2ff;
 }
 
-.sectionTitle {
-    -fx-font-weight: bold;
-    -fx-text-fill: #111827;
+/* labels */
+.label{
+    -fx-text-fill:#e9ecf5;
+}
+.topLabel{
+    -fx-text-fill: rgba(233,236,245,0.80);
+    -fx-font-weight:600;
+}
+.sectionTitle{
+    -fx-font-weight:700;
+    -fx-text-fill: rgba(233,236,245,0.90);
 }
 
-.card {
-    -fx-padding: 12;
-    -fx-spacing: 4;
-    -fx-background-color: white;
-    -fx-background-radius: 10;
-    -fx-border-radius: 10;
-    -fx-border-color: #e5e7eb;
+/* cards */
+.card{
+    -fx-background-color: rgba(255,255,255,0.05);
+    -fx-background-radius:12;
+    -fx-border-radius:12;
+    -fx-border-color: rgba(255,255,255,0.10);
 }
 
-.cardTitle {
-    -fx-text-fill: #6b7280;
+.cardTitle{
+    -fx-text-fill: rgba(233,236,245,0.65);
+}
+.cardValue{
+    -fx-text-fill:#ffffff;
+    -fx-font-size:18px;
+    -fx-font-weight:800;
 }
 
-.cardValue {
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
+/* inputs */
+.combo-box, .text-field{
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius:10;
+    -fx-border-radius:10;
+    -fx-border-color: rgba(255,255,255,0.14);
+    -fx-text-fill:#f4f7ff;
+    -fx-padding:6 10;
+    -fx-pref-height:34;
+}
+.combo-box:focused, .text-field:focused{
+    -fx-border-color:#4f8cff;
 }
 
-.button {
-    -fx-background-radius: 8;
+/* combobox dropdown */
+.combo-box-popup .list-view{
+    -fx-background-color:#141a2e;
+    -fx-border-color: rgba(255,255,255,0.15);
+}
+.combo-box-popup .list-cell{
+    -fx-background-color: transparent;
+    -fx-text-fill:#ffffff;
+    -fx-padding:8 12;
+}
+.combo-box-popup .list-cell:hover{
+    -fx-background-color: rgba(79,140,255,0.28);
+}
+.combo-box-popup .list-cell:selected{
+    -fx-background-color:#4f8cff;
+    -fx-text-fill:#ffffff;
+}
+
+/* buttons */
+.button{
+    -fx-background-radius:10;
+    -fx-border-radius:10;
+    -fx-font-weight:700;
+    -fx-padding:8 14;
+    -fx-background-color: rgba(255,255,255,0.10);
+    -fx-text-fill:#eef2ff;
+}
+.button:hover{ -fx-background-color: rgba(255,255,255,0.16); }
+
+#refreshButton{
+    -fx-background-color:#4f8cff;
+    -fx-text-fill:white;
+}
+#refreshButton:hover{ -fx-background-color:#3f7ae0; }
+
+/* list views (dark, readable) */
+.list-view{
+    -fx-background-color: rgba(0,0,0,0.18);
+    -fx-background-radius:10;
+    -fx-border-radius:10;
+    -fx-border-color: rgba(255,255,255,0.10);
+}
+.list-cell{
+    -fx-background-color: transparent;
+    -fx-text-fill:#eef2ff;
+    -fx-padding:8 10;
+}
+.list-cell:filled:hover{
+    -fx-background-color: rgba(79,140,255,0.18);
+}
+.list-cell:filled:selected{
+    -fx-background-color: rgba(79,140,255,0.30);
+}
+
+/* charts: remove ugly white blocks */
+.chart{
+    -fx-background-color: transparent;
+}
+.chart-plot-background{
+    -fx-background-color: rgba(255,255,255,0.04);
+}
+.chart-title{
+    -fx-text-fill:#eef2ff;
+    -fx-font-weight:800;
+}
+.axis-label{
+    -fx-text-fill: rgba(233,236,245,0.80);
+}
+.axis-tick-label{
+    -fx-text-fill: rgba(233,236,245,0.70);
+}
+.chart-vertical-grid-lines, .chart-horizontal-grid-lines{
+    -fx-stroke: rgba(255,255,255,0.10);
+}
+
+.combo-box-base,
+.combo-box-base:focused{
+    -fx-background-color:rgba(255,255,255,0.08);
+}
+.combo-box .text-field,
+.combo-box .list-cell,
+.combo-box .arrow-button{
+    -fx-background-color:transparent;
+}
+.combo-box:focused{
+    -fx-border-color:#4f8cff;
+}
+/* menubar dropdown (context menu) */
+.context-menu{
+    -fx-background-color:#141a2e;
+    -fx-background-radius:10;
+    -fx-border-radius:10;
+    -fx-border-color:rgba(255,255,255,0.15);
+    -fx-padding:6;
+}
+
+.menu-item .label{
+    -fx-text-fill:#eef2ff;
+}
+
+.menu-item:focused, .menu-item:hovered{
+    -fx-background-color:rgba(79,140,255,0.28);
+    -fx-background-radius:8;
+}
+
+.menu-item:focused .label, .menu-item:hovered .label{
+    -fx-text-fill:#ffffff;
+}
+
+/* disabled item still readable */
+.menu-item:disabled .label{
+    -fx-text-fill:rgba(233,236,245,0.45);
+}
+/* pie chart labels */
+.chart-pie-label{
+    -fx-fill:#ffffff;
+    -fx-font-size:12px;
+}
+
+/* little connector lines */
+.chart-pie-label-line{
+    -fx-stroke:#ffffff;
+}
+
+/* legend text (if visible anywhere) */
+.chart-legend-item{
+    -fx-text-fill:#ffffff;
 }

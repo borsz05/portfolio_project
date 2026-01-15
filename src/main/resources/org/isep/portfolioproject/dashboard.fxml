@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -15,69 +16,92 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1200.0"
-            xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.isep.portfolioproject.controller.MainDashboard"
-            stylesheets="@dashboard.css">
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" stylesheets="@dashboard.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.isep.portfolioproject.controller.MainDashboard">
+
     <children>
+
         <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <menus>
+                <Menu text="Portfolio">
+                    <MenuItem onAction="#createPortfolio" text="New" />
+                    <MenuItem onAction="#clonePortfolio" text="Clone" />
+                    <MenuItem onAction="#deletePortfolio" text="Delete" />
+                    <MenuItem onAction="#addEvent" text="Add Event" />
+                </Menu>
                 <Menu text="Actions">
                     <MenuItem onAction="#openTransfer" text="Transfer" />
                     <MenuItem onAction="#openBuySell" text="Buy / Sell" />
+                    <MenuItem onAction="#importExchange" text="Import Exchange CSV" />
+                </Menu>
+                <Menu text="Account">
+                    <MenuItem onAction="#logout" text="Logout" />
+                </Menu>
+                <Menu text="Security">
+                    <MenuItem onAction="#setEncryption" text="Set Passphrase" />
                 </Menu>
             </menus>
         </MenuBar>
-        <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="800.0" prefWidth="1200.0"
-                    AnchorPane.topAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+
+        <!-- content area -->
+        <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
+
             <children>
-                <HBox layoutX="20" layoutY="40.0" spacing="10">
+
+                <!-- filters -->
+                <HBox layoutX="18.4" prefWidth="1162.0" spacing="12" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="18.0">
                     <children>
-                        <Label text="Portfolio:" />
-                        <ComboBox fx:id="portfolioCombo" prefWidth="160" />
-                        <Label prefWidth="50.0" text="Currency:" />
-                        <ComboBox fx:id="currencyCombo" prefWidth="110" />
-                        <Label text="Period:" />
-                        <ComboBox fx:id="periodCombo" prefWidth="130" />
-                        <Button fx:id="refreshButton" text="Refresh" onAction="#onRefresh" />
+                        <Label styleClass="topLabel" text="Portfolio:" />
+                        <ComboBox fx:id="portfolioCombo" prefWidth="170" />
+
+                        <Label styleClass="topLabel" text="Currency:" />
+                        <ComboBox fx:id="currencyCombo" prefWidth="130" />
+
+                        <Label styleClass="topLabel" text="Period:" />
+                        <ComboBox fx:id="periodCombo" prefWidth="150" />
+
+                        <Button fx:id="refreshButton" onAction="#onRefresh" text="Refresh" />
                     </children>
                 </HBox>
-                <HBox layoutX="20" layoutY="75.0" spacing="12">
+
+                <!-- summary cards -->
+                <HBox layoutY="76.0" prefHeight="62.0" prefWidth="800.0" spacing="12" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="380.0" AnchorPane.topAnchor="76.0">
                     <children>
-                        <VBox prefWidth="190" styleClass="card">
+                        <VBox prefWidth="190.0" styleClass="card">
+                            <padding><Insets bottom="12" left="12" right="12" top="12" /></padding>
                             <children>
-                                <Label text="Total Value" styleClass="cardTitle" />
-                                <Label fx:id="totalValueLabel" text="--" styleClass="cardValue" />
+                                <Label styleClass="cardTitle" text="Total Value" />
+                                <Label fx:id="totalValueLabel" styleClass="cardValue" text="--" />
                             </children>
                         </VBox>
+
                         <VBox prefWidth="190" styleClass="card">
+                            <padding><Insets bottom="12" left="12" right="12" top="12" /></padding>
                             <children>
-                                <Label text="Cash" styleClass="cardTitle" />
-                                <Label fx:id="cashLabel" text="--" styleClass="cardValue" />
+                                <Label styleClass="cardTitle" text="Cash" />
+                                <Label fx:id="cashLabel" styleClass="cardValue" text="--" />
                             </children>
                         </VBox>
+
                         <VBox prefWidth="190" styleClass="card">
+                            <padding><Insets bottom="12" left="12" right="12" top="12" /></padding>
                             <children>
-                                <Label text="Change" styleClass="cardTitle" />
-                                <Label fx:id="changeLabel" text="--" styleClass="cardValue" />
+                                <Label styleClass="cardTitle" text="Change" />
+                                <Label fx:id="changeLabel" styleClass="cardValue" text="--" />
                             </children>
                         </VBox>
+
                         <VBox prefWidth="190" styleClass="card">
+                            <padding><Insets bottom="12" left="12" right="12" top="12" /></padding>
                             <children>
-                                <Label text="Unrealized P/L" styleClass="cardTitle" />
-                                <Label fx:id="plLabel" text="--" styleClass="cardValue" />
+                                <Label styleClass="cardTitle" text="Unrealized P/L" />
+                                <Label fx:id="plLabel" styleClass="cardValue" text="--" />
                             </children>
                         </VBox>
                     </children>
                 </HBox>
-                <LineChart fx:id="valueLineChart"
-                           layoutX="20" layoutY="145.0"
-                           prefHeight="650" prefWidth="820"
-                           title="Portfolio Value"
-                           AnchorPane.topAnchor="145.0"
-                           AnchorPane.leftAnchor="20.0"
-                           AnchorPane.bottomAnchor="20.0"
-                           AnchorPane.rightAnchor="360.0">
+
+                <!-- main chart -->
+                <LineChart fx:id="valueLineChart" animated="false" layoutY="160.8" legendVisible="false" prefHeight="591.0" prefWidth="800.0" title="Portfolio Value" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="380.0" AnchorPane.topAnchor="161.0">
                     <xAxis>
                         <CategoryAxis label="Time" />
                     </xAxis>
@@ -85,20 +109,38 @@
                         <NumberAxis label="Value" />
                     </yAxis>
                 </LineChart>
-                <VBox layoutX="860" layoutY="145.0" prefHeight="650" prefWidth="320" minWidth="320" maxWidth="320" spacing="10"
-                      AnchorPane.topAnchor="145.0"
-                      AnchorPane.rightAnchor="20.0"
-                      AnchorPane.bottomAnchor="20.0">
-                    <children>
-                        <Label text="Allocation" styleClass="sectionTitle" />
-                        <PieChart fx:id="allocationPieChart" prefHeight="220" prefWidth="320" />
-                        <Label text="Events" styleClass="sectionTitle" />
-                        <ListView fx:id="eventsList" prefHeight="200" prefWidth="320" />
-                        <Label text="Whale Alerts" styleClass="sectionTitle" />
-                        <ListView fx:id="whaleAlertsList" prefHeight="200" prefWidth="320" />
-                    </children>
+
+                <!-- right column -->
+                <VBox prefWidth="340" spacing="12" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="140.0">
+
+                    <VBox styleClass="card">
+                        <padding><Insets bottom="12" left="12" right="12" top="12" /></padding>
+                        <children>
+                            <Label styleClass="sectionTitle" text="Allocation" />
+                            <PieChart fx:id="allocationPieChart" prefHeight="220" />
+                        </children>
+                    </VBox>
+
+                    <VBox styleClass="card" VBox.vgrow="ALWAYS">
+                        <padding><Insets bottom="12" left="12" right="12" top="12" /></padding>
+                        <children>
+                            <Label styleClass="sectionTitle" text="Events" />
+                            <ListView fx:id="eventsList" VBox.vgrow="ALWAYS" />
+                        </children>
+                    </VBox>
+
+                    <VBox styleClass="card" VBox.vgrow="ALWAYS">
+                        <padding><Insets bottom="12" left="12" right="12" top="12" /></padding>
+                        <children>
+                            <Label styleClass="sectionTitle" text="Whale Alerts" />
+                            <ListView fx:id="whaleAlertsList" VBox.vgrow="ALWAYS" />
+                        </children>
+                    </VBox>
+
                 </VBox>
+
             </children>
         </AnchorPane>
+
     </children>
 </AnchorPane>

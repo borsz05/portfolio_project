@@ -7,13 +7,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
+import org.isep.portfolioproject.service.ApiService;
+import org.isep.portfolioproject.service.AppState;
+import org.isep.portfolioproject.service.DataManager;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 
 public class LoginController {
 
@@ -64,6 +69,26 @@ public class LoginController {
 
 
         try {
+            String userKey = sanitize(username);
+            String baseDir = "data/users/" + userKey;
+            String portfolioPath = baseDir + "/portfolios.json";
+            String accountsPath = baseDir + "/accounts.json";
+
+            DataManager dataManager = new DataManager(portfolioPath);
+            dataManager.setSeedDemo(false);
+            String passphrase = null;
+            if (dataManager.isEncrypted()) {
+                TextInputDialog dialog = new TextInputDialog();
+                dialog.setTitle("Decrypt Data");
+                dialog.setHeaderText("Enter passphrase to decrypt saved data");
+                Optional<String> result = dialog.showAndWait();
+                if (result.isEmpty()) {
+                    throw new IllegalStateException("Passphrase required for encrypted data");
+                }
+                passphrase = result.get();
+            }
+            AppState.init(dataManager, new ApiService(), passphrase, userKey, accountsPath);
+
             Parent root = FXMLLoader.load(getClass().getResource("/org/isep/portfolioproject/dashboard.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Dashboard");
@@ -102,5 +127,9 @@ public class LoginController {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static String sanitize(String value) {
+        return value.replaceAll("[^a-zA-Z0-9_-]", "_");
     }
 }

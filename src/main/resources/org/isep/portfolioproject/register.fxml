@@ -7,21 +7,21 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.isep.portfolioproject.controller.RegisterController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@register.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.isep.portfolioproject.controller.RegisterController">
    <children>
-      <Label layoutX="263.0" layoutY="52.0" text="Register user">
+      <Label layoutX="272.0" layoutY="14.0" prefHeight="44.0" prefWidth="111.0" text="REGISTER" textAlignment="CENTER">
          <font>
-            <Font name="System Bold" size="12.0" />
+            <Font name="System Bold" size="24.0" />
          </font>
       </Label>
-      <Label layoutX="273.0" layoutY="141.0" text="Lastname" />
-      <Label layoutX="283.0" layoutY="83.0" text="Name" />
-      <TextField fx:id="lastnameField" layoutX="225.0" layoutY="165.0" />
-      <TextField fx:id="nameField" layoutX="224.0" layoutY="107.0" />
+      <Label layoutX="273.0" layoutY="127.0" text="Lastname" />
+      <Label layoutX="283.0" layoutY="55.0" text="Name" />
+      <TextField fx:id="lastnameField" layoutX="225.0" layoutY="156.0" />
+      <TextField fx:id="nameField" layoutX="224.0" layoutY="86.0" />
       <Label layoutX="274.0" layoutY="200.0" text="Password" />
       <Label layoutX="237.0" layoutY="263.0" text="Password confirmation" />
       <PasswordField fx:id="passwordField" layoutX="223.0" layoutY="224.0" />
       <PasswordField fx:id="confirmPasswordField" layoutX="225.0" layoutY="288.0" />
-      <Button onAction="#handleCreate" layoutX="274.0" layoutY="330.0" mnemonicParsing="false" style="-fx-background-color: #2c7be5;" text="Create" textFill="WHITE" />
+      <Button layoutX="274.0" layoutY="330.0" mnemonicParsing="false" onAction="#handleCreate" style="-fx-background-color: #2c7be5;" text="Create" textFill="WHITE" />
    </children>
 </AnchorPane>
