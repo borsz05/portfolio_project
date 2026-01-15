@@ -22,9 +22,22 @@
 
         <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <menus>
+                <Menu text="Portfolio">
+                    <MenuItem onAction="#createPortfolio" text="New" />
+                    <MenuItem onAction="#clonePortfolio" text="Clone" />
+                    <MenuItem onAction="#deletePortfolio" text="Delete" />
+                    <MenuItem onAction="#addEvent" text="Add Event" />
+                </Menu>
                 <Menu text="Actions">
                     <MenuItem onAction="#openTransfer" text="Transfer" />
                     <MenuItem onAction="#openBuySell" text="Buy / Sell" />
+                    <MenuItem onAction="#importExchange" text="Import Exchange CSV" />
+                </Menu>
+                <Menu text="Account">
+                    <MenuItem onAction="#logout" text="Logout" />
+                </Menu>
+                <Menu text="Security">
+                    <MenuItem onAction="#setEncryption" text="Set Passphrase" />
                 </Menu>
             </menus>
         </MenuBar>

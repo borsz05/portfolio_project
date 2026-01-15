@@ -8,6 +8,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class RegisterController {
 
@@ -50,6 +52,14 @@ public class RegisterController {
             return;
         }
 
+        try {
+            String userKey = sanitize(name);
+            Path userDir = Path.of("data", "users", userKey);
+            Files.createDirectories(userDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         new Alert(Alert.AlertType.INFORMATION, "Account created").showAndWait();
         nameField.getScene().getWindow().hide();
     }
@@ -64,5 +74,9 @@ public class RegisterController {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static String sanitize(String value) {
+        return value.replaceAll("[^a-zA-Z0-9_-]", "_");
     }
 }
