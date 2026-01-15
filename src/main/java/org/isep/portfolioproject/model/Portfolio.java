@@ -18,6 +18,8 @@ public class Portfolio {
     private String description;
     private boolean isThirdPartyMonitor;
     private Currency referenceCurrency;
+    private List<String> monitoredAddresses = new ArrayList<>();
+    private List<String> monitoredBlockchains = new ArrayList<>();
 
     private List<Transaction> transactions = new ArrayList<>();
     private List<Event> events = new ArrayList<>();
@@ -103,6 +105,8 @@ public class Portfolio {
         copy.setDescription(this.description);
         copy.setIsThirdPartyMonitor(this.isThirdPartyMonitor);
         copy.setReferenceCurrency(this.referenceCurrency);
+        copy.setMonitoredAddresses(new ArrayList<>(this.monitoredAddresses));
+        copy.setMonitoredBlockchains(new ArrayList<>(this.monitoredBlockchains));
 
         copy.setTransactions(new ArrayList<>(this.transactions));
         copy.setEvents(new ArrayList<>(this.events));
@@ -167,6 +171,16 @@ public class Portfolio {
         }
     }
 
+    public void addEvent(Event event) {
+        if (event == null) return;
+        events.add(event);
+    }
+
+    public void addTransaction(Transaction transaction) {
+        if (transaction == null) return;
+        transactions.add(transaction);
+    }
+
 
     //SETTERS
     public void setId(String id) {
@@ -192,6 +206,12 @@ public class Portfolio {
     public void setPositions(Map<Asset, Position> positions) {
         this.positions = positions;
     }
+    public void setMonitoredAddresses(List<String> monitoredAddresses) {
+        this.monitoredAddresses = monitoredAddresses;
+    }
+    public void setMonitoredBlockchains(List<String> monitoredBlockchains) {
+        this.monitoredBlockchains = monitoredBlockchains;
+    }
 
 
     //GETTERS
@@ -212,10 +232,21 @@ public class Portfolio {
     public List<Event> getEvents() {
         return events;
     }
+    public List<String> getMonitoredAddresses() {
+        return monitoredAddresses;
+    }
+    public List<String> getMonitoredBlockchains() {
+        return monitoredBlockchains;
+    }
     public Map<Asset, Position> getPositions() {
         return positions;
     }
     public List<Transaction> getTransactions(){
         return transactions;
+    }
+
+    @Override
+    public String toString() {
+        return name == null ? "Portfolio" : name;
     }
 }

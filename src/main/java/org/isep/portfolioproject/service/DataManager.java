@@ -28,7 +28,7 @@ public class DataManager {
     private String storagePath;
     private String passphrase;
     private boolean seedDemo = true;
-
+  
     public DataManager() {
     }
 
