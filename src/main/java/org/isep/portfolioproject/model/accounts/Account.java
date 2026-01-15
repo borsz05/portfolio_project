@@ -61,5 +61,10 @@ public abstract class Account {
     protected void setBalance(double balance) {
         this.balance = balance;
     }
+
+    @Override
+    public String toString() {
+        return label;
+    }
 }
 
