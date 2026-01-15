@@ -1,3 +1,4 @@
+//dashboard.css
 .root{
     -fx-font-family:"Segoe UI",System;
     -fx-font-size:13px;
@@ -185,4 +186,55 @@
 /* legend text (if visible anywhere) */
 .chart-legend-item{
     -fx-text-fill:#ffffff;
+}
+.chart-legend{
+    -fx-background-color: rgba(0,0,0,0.28);
+    -fx-background-radius:8;
+    -fx-padding:6 8;
+}
+.chart-legend-item-symbol{
+    -fx-background-color: -fx-pie-color;
+    -fx-background-radius:3;
+    -fx-padding:4;
+}
+
+/* scroll pane to keep dark background */
+.scroll-pane{
+    -fx-background-color: transparent;
+}
+.scroll-pane > .viewport{
+    -fx-background-color: transparent;
+}
+
+/* table view styled like cards/list views */
+.table-view{
+    -fx-background-color: rgba(0,0,0,0.18);
+    -fx-background-radius:10;
+    -fx-border-radius:10;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-table-cell-border-color: rgba(255,255,255,0.08);
+}
+.table-view .column-header-background{
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius:10 10 0 0;
+}
+.table-view .column-header, .table-view .filler{
+    -fx-background-color: transparent;
+}
+.table-view .column-header .label{
+    -fx-text-fill:#eef2ff;
+    -fx-font-weight:700;
+}
+.table-row-cell{
+    -fx-background-color: transparent;
+}
+.table-row-cell:filled:hover{
+    -fx-background-color: rgba(79,140,255,0.18);
+}
+.table-row-cell:filled:selected{
+    -fx-background-color: rgba(79,140,255,0.30);
+}
+.table-cell{
+    -fx-text-fill:#eef2ff;
+    -fx-padding:8 10;
 }

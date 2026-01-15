@@ -12,135 +12,205 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1200.0" stylesheets="@dashboard.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.isep.portfolioproject.controller.MainDashboard">
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" stylesheets="@dashboard.css" xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.isep.portfolioproject.controller.MainDashboard">
 
     <children>
 
         <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <menus>
                 <Menu text="Portfolio">
-                    <MenuItem onAction="#createPortfolio" text="New" />
-                    <MenuItem onAction="#clonePortfolio" text="Clone" />
-                    <MenuItem onAction="#deletePortfolio" text="Delete" />
-                    <MenuItem onAction="#addEvent" text="Add Event" />
+                    <MenuItem onAction="#createPortfolio" text="New"/>
+                    <MenuItem onAction="#clonePortfolio" text="Clone"/>
+                    <MenuItem onAction="#deletePortfolio" text="Delete"/>
+                    <MenuItem onAction="#addEvent" text="Add Event"/>
                 </Menu>
                 <Menu text="Actions">
-                    <MenuItem onAction="#openTransfer" text="Transfer" />
-                    <MenuItem onAction="#openBuySell" text="Buy / Sell" />
-                    <MenuItem onAction="#importExchange" text="Import Exchange CSV" />
+                    <MenuItem onAction="#openTransfer" text="Transfer"/>
+                    <MenuItem onAction="#openBuySell" text="Buy / Sell"/>
+                    <MenuItem onAction="#importExchange" text="Import Exchange CSV"/>
                 </Menu>
                 <Menu text="Account">
-                    <MenuItem onAction="#logout" text="Logout" />
+                    <MenuItem onAction="#logout" text="Logout"/>
                 </Menu>
                 <Menu text="Security">
-                    <MenuItem onAction="#setEncryption" text="Set Passphrase" />
+                    <MenuItem onAction="#setEncryption" text="Set Passphrase"/>
                 </Menu>
             </menus>
         </MenuBar>
 
         <!-- content area -->
-        <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
-
-            <children>
-
-                <!-- filters -->
-                <HBox layoutX="18.4" prefWidth="1162.0" spacing="12" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="18.0">
+        <ScrollPane fitToWidth="true" styleClass="dashboardScroll" AnchorPane.bottomAnchor="0.0"
+                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
+            <content>
+                <AnchorPane prefHeight="1200.0" prefWidth="1200.0" styleClass="contentPane">
                     <children>
-                        <Label styleClass="topLabel" text="Portfolio:" />
-                        <ComboBox fx:id="portfolioCombo" prefWidth="170" />
 
-                        <Label styleClass="topLabel" text="Currency:" />
-                        <ComboBox fx:id="currencyCombo" prefWidth="130" />
+                        <!-- filters -->
+                        <HBox layoutX="18.4" prefWidth="1162.0" spacing="12" AnchorPane.leftAnchor="18.0"
+                              AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="18.0">
+                            <children>
+                                <Label styleClass="topLabel" text="Portfolio:"/>
+                                <ComboBox fx:id="portfolioCombo" prefWidth="170"/>
 
-                        <Label styleClass="topLabel" text="Period:" />
-                        <ComboBox fx:id="periodCombo" prefWidth="150" />
+                                <Label styleClass="topLabel" text="Currency:"/>
+                                <ComboBox fx:id="currencyCombo" prefWidth="130"/>
 
-                        <Button fx:id="refreshButton" onAction="#onRefresh" text="Refresh" />
+                                <Label styleClass="topLabel" text="Period:"/>
+                                <ComboBox fx:id="periodCombo" prefWidth="150"/>
+
+                                <Button fx:id="refreshButton" onAction="#onRefresh" text="Refresh"/>
+                            </children>
+                        </HBox>
+
+                        <!-- summary cards -->
+                        <HBox layoutY="76.0" prefHeight="62.0" prefWidth="800.0" spacing="12"
+                              AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="380.0" AnchorPane.topAnchor="76.0">
+                            <children>
+                                <VBox prefWidth="190.0" styleClass="card">
+                                    <padding>
+                                        <Insets bottom="12" left="12" right="12" top="12"/>
+                                    </padding>
+                                    <children>
+                                        <Label styleClass="cardTitle" text="Total Value"/>
+                                        <Label fx:id="totalValueLabel" styleClass="cardValue" text="--"/>
+                                    </children>
+                                </VBox>
+
+                                <VBox prefWidth="190" styleClass="card">
+                                    <padding>
+                                        <Insets bottom="12" left="12" right="12" top="12"/>
+                                    </padding>
+                                    <children>
+                                        <Label styleClass="cardTitle" text="Cash"/>
+                                        <Label fx:id="cashLabel" styleClass="cardValue" text="--"/>
+                                    </children>
+                                </VBox>
+
+                                <VBox prefWidth="190" styleClass="card">
+                                    <padding>
+                                        <Insets bottom="12" left="12" right="12" top="12"/>
+                                    </padding>
+                                    <children>
+                                        <Label styleClass="cardTitle" text="Change"/>
+                                        <Label fx:id="changeLabel" styleClass="cardValue" text="--"/>
+                                    </children>
+                                </VBox>
+
+                                <VBox prefWidth="190" styleClass="card">
+                                    <padding>
+                                        <Insets bottom="12" left="12" right="12" top="12"/>
+                                    </padding>
+                                    <children>
+                                        <Label styleClass="cardTitle" text="Unrealized P/L"/>
+                                        <Label fx:id="plLabel" styleClass="cardValue" text="--"/>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+
+                        <!-- left column -->
+                        <VBox spacing="12" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="380.0"
+                              AnchorPane.topAnchor="161.0">
+                            <children>
+                                <!-- main chart -->
+                                <LineChart fx:id="valueLineChart" animated="false" legendVisible="false"
+                                           prefHeight="520.0" prefWidth="800.0" title="Portfolio Value">
+                                    <xAxis>
+                                        <CategoryAxis label="Time"/>
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis label="Value"/>
+                                    </yAxis>
+                                </LineChart>
+
+                                <!-- positions table -->
+                                <VBox styleClass="card">
+                                    <padding>
+                                        <Insets bottom="12" left="12" right="12" top="12"/>
+                                    </padding>
+                                    <children>
+                                        <Label styleClass="sectionTitle" text="Portfolio Composition"/>
+                                        <TableView fx:id="positionsTable" prefHeight="260" styleClass="tableView">
+                                            <columns>
+                                                <TableColumn fx:id="typeCol" prefWidth="80" text="Type"/>
+                                                <TableColumn fx:id="symbolCol" prefWidth="100" text="Symbol"/>
+                                                <TableColumn fx:id="quantityCol" prefWidth="120" text="Quantity"/>
+                                                <TableColumn fx:id="priceCol" prefWidth="120" text="Price"/>
+                                                <TableColumn fx:id="valueCol" prefWidth="140" text="Value"/>
+                                            </columns>
+                                        </TableView>
+                                    </children>
+                                </VBox>
+
+                                <!-- savings forecast table -->
+                                <VBox styleClass="card">
+                                    <padding>
+                                        <Insets bottom="12" left="12" right="12" top="12"/>
+                                    </padding>
+                                    <children>
+                                        <Label fx:id="savingsTitleLabel" styleClass="sectionTitle"
+                                               text="Savings Forecast"/>
+                                        <TableView fx:id="savingsTable" prefHeight="220" styleClass="tableView">
+                                            <columns>
+                                                <TableColumn fx:id="periodCol" prefWidth="120" text="Period"/>
+                                                <TableColumn fx:id="interestCol" prefWidth="140" text="Interest"/>
+                                                <TableColumn fx:id="expectedCol" prefWidth="160"
+                                                             text="Expected Balance"/>
+                                            </columns>
+                                        </TableView>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+
+                        <!-- right column -->
+                        <VBox prefWidth="340" spacing="12" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0"
+                              AnchorPane.topAnchor="140.0">
+
+                            <VBox styleClass="card">
+                                <padding>
+                                    <Insets bottom="12" left="12" right="12" top="12"/>
+                                </padding>
+                                <children>
+                                    <Label styleClass="sectionTitle" text="Allocation"/>
+                                    <PieChart fx:id="allocationPieChart" prefHeight="220"/>
+                                </children>
+                            </VBox>
+
+                            <VBox styleClass="card" VBox.vgrow="ALWAYS">
+                                <padding>
+                                    <Insets bottom="12" left="12" right="12" top="12"/>
+                                </padding>
+                                <children>
+                                    <Label styleClass="sectionTitle" text="Events"/>
+                                    <ListView fx:id="eventsList" VBox.vgrow="ALWAYS"/>
+                                </children>
+                            </VBox>
+
+                            <VBox styleClass="card" VBox.vgrow="ALWAYS">
+                                <padding>
+                                    <Insets bottom="12" left="12" right="12" top="12"/>
+                                </padding>
+                                <children>
+                                    <Label styleClass="sectionTitle" text="Whale Alerts"/>
+                                    <ListView fx:id="whaleAlertsList" VBox.vgrow="ALWAYS"/>
+                                </children>
+                            </VBox>
+
+                        </VBox>
+
                     </children>
-                </HBox>
-
-                <!-- summary cards -->
-                <HBox layoutY="76.0" prefHeight="62.0" prefWidth="800.0" spacing="12" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="380.0" AnchorPane.topAnchor="76.0">
-                    <children>
-                        <VBox prefWidth="190.0" styleClass="card">
-                            <padding><Insets bottom="12" left="12" right="12" top="12" /></padding>
-                            <children>
-                                <Label styleClass="cardTitle" text="Total Value" />
-                                <Label fx:id="totalValueLabel" styleClass="cardValue" text="--" />
-                            </children>
-                        </VBox>
-
-                        <VBox prefWidth="190" styleClass="card">
-                            <padding><Insets bottom="12" left="12" right="12" top="12" /></padding>
-                            <children>
-                                <Label styleClass="cardTitle" text="Cash" />
-                                <Label fx:id="cashLabel" styleClass="cardValue" text="--" />
-                            </children>
-                        </VBox>
-
-                        <VBox prefWidth="190" styleClass="card">
-                            <padding><Insets bottom="12" left="12" right="12" top="12" /></padding>
-                            <children>
-                                <Label styleClass="cardTitle" text="Change" />
-                                <Label fx:id="changeLabel" styleClass="cardValue" text="--" />
-                            </children>
-                        </VBox>
-
-                        <VBox prefWidth="190" styleClass="card">
-                            <padding><Insets bottom="12" left="12" right="12" top="12" /></padding>
-                            <children>
-                                <Label styleClass="cardTitle" text="Unrealized P/L" />
-                                <Label fx:id="plLabel" styleClass="cardValue" text="--" />
-                            </children>
-                        </VBox>
-                    </children>
-                </HBox>
-
-                <!-- main chart -->
-                <LineChart fx:id="valueLineChart" animated="false" layoutY="160.8" legendVisible="false" prefHeight="591.0" prefWidth="800.0" title="Portfolio Value" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="380.0" AnchorPane.topAnchor="161.0">
-                    <xAxis>
-                        <CategoryAxis label="Time" />
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis label="Value" />
-                    </yAxis>
-                </LineChart>
-
-                <!-- right column -->
-                <VBox prefWidth="340" spacing="12" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="140.0">
-
-                    <VBox styleClass="card">
-                        <padding><Insets bottom="12" left="12" right="12" top="12" /></padding>
-                        <children>
-                            <Label styleClass="sectionTitle" text="Allocation" />
-                            <PieChart fx:id="allocationPieChart" prefHeight="220" />
-                        </children>
-                    </VBox>
-
-                    <VBox styleClass="card" VBox.vgrow="ALWAYS">
-                        <padding><Insets bottom="12" left="12" right="12" top="12" /></padding>
-                        <children>
-                            <Label styleClass="sectionTitle" text="Events" />
-                            <ListView fx:id="eventsList" VBox.vgrow="ALWAYS" />
-                        </children>
-                    </VBox>
-
-                    <VBox styleClass="card" VBox.vgrow="ALWAYS">
-                        <padding><Insets bottom="12" left="12" right="12" top="12" /></padding>
-                        <children>
-                            <Label styleClass="sectionTitle" text="Whale Alerts" />
-                            <ListView fx:id="whaleAlertsList" VBox.vgrow="ALWAYS" />
-                        </children>
-                    </VBox>
-
-                </VBox>
-
-            </children>
-        </AnchorPane>
+                </AnchorPane>
+            </content>
+        </ScrollPane>
 
     </children>
 </AnchorPane>
