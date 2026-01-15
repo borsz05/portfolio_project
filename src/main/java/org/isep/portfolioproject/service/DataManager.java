@@ -27,7 +27,8 @@ public class DataManager {
 
     private String storagePath;
     private String passphrase;
-
+    private boolean seedDemo = true;
+  
     public DataManager() {
     }
 
@@ -68,7 +69,7 @@ public class DataManager {
         this.passphrase = passphrase;
         File file = new File(storagePath);
         if (!file.exists() || file.length() == 0) {
-            return demoPortfolios();
+            return seedDemo ? demoPortfolios() : new ArrayList<>();
         }
 
         try {
@@ -92,7 +93,7 @@ public class DataManager {
             }
 
             if (portfolios.isEmpty()) {
-                return demoPortfolios();
+                return seedDemo ? demoPortfolios() : new ArrayList<>();
             }
             return portfolios;
         } catch (Exception e) {
@@ -121,6 +122,10 @@ public class DataManager {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public void setSeedDemo(boolean seedDemo) {
+        this.seedDemo = seedDemo;
     }
 
     private List<Portfolio> demoPortfolios() {
