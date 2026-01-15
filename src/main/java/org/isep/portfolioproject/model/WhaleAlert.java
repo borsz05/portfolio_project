@@ -40,4 +40,10 @@ public class WhaleAlert {
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
+
+    @Override
+    public String toString() {
+        String when = timestamp == null ? "" : timestamp.toLocalDate().toString();
+        return when + " " + blockchain + " " + String.format("%.2f", amount);
+    }
 }
