@@ -1,5 +1,6 @@
 package org.isep.portfolioproject.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.isep.portfolioproject.model.Event;
 import org.isep.portfolioproject.model.Portfolio;
@@ -28,7 +29,7 @@ public class DataManager {
     private String storagePath;
     private String passphrase;
     private boolean seedDemo = true;
-  
+
     public DataManager() {
     }
 
@@ -175,6 +176,7 @@ public class DataManager {
         return list;
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class PortfolioData {
         public String id;
         public String name;

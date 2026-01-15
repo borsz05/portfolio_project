@@ -14,10 +14,14 @@ import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.stage.Stage;
 import org.isep.portfolioproject.model.Event;
 import org.isep.portfolioproject.model.Portfolio;
+import org.isep.portfolioproject.model.Position;
 import org.isep.portfolioproject.model.Transaction;
 import org.isep.portfolioproject.model.WhaleAlert;
 import org.isep.portfolioproject.service.AnalysisService;
@@ -53,6 +57,21 @@ public class MainDashboard {
     @FXML private Label changeLabel;
     @FXML private Label plLabel;
 
+    @FXML private TableView<PositionRow> positionsTable;
+    @FXML private TableColumn<PositionRow, String> typeCol;
+    @FXML private TableColumn<PositionRow, String> symbolCol;
+    @FXML private TableColumn<PositionRow, String> quantityCol;
+    @FXML private TableColumn<PositionRow, String> priceCol;
+    @FXML private TableColumn<PositionRow, String> valueCol;
+
+    @FXML private Label savingsTitleLabel;
+    @FXML private TableView<SavingsRow> savingsTable;
+    @FXML private TableColumn<SavingsRow, String> periodCol;
+    @FXML private TableColumn<SavingsRow, String> interestCol;
+    @FXML private TableColumn<SavingsRow, String> expectedCol;
+
+    private static final double SAVINGS_ANNUAL_RATE = 0.03;
+
     private final AnalysisService analysisService = AppState.get().getAnalysisService();
     private final PriceProvider priceProvider = AppState.get().getPriceProvider();
     private final ApiService apiService = new ApiService();
@@ -65,6 +84,8 @@ public class MainDashboard {
         periodCombo.getItems().setAll("1W", "1M", "3M", "1Y");
         periodCombo.getSelectionModel().select("1M");
 
+        setupPositionsTable();
+        setupSavingsTable();
         refreshPortfolioCombo();
 
         portfolioCombo.setOnAction(e -> {
@@ -89,6 +110,8 @@ public class MainDashboard {
             allocationPieChart.getData().clear();
             eventsList.getItems().clear();
             whaleAlertsList.getItems().clear();
+            positionsTable.getItems().clear();
+            renderSavingsTable(currencyCombo.getValue());
             return;
         }
 
@@ -110,6 +133,8 @@ public class MainDashboard {
             renderPieChart(portfolio, currency);
             renderEvents(portfolio);
             renderWhaleAlerts(portfolio);
+            renderPositionsTable(portfolio, currency);
+            renderSavingsTable(currency.name());
         } catch (Exception e) {
             totalValueLabel.setText("--");
             cashLabel.setText("--");
@@ -119,6 +144,8 @@ public class MainDashboard {
             allocationPieChart.getData().clear();
             eventsList.getItems().clear();
             whaleAlertsList.getItems().clear();
+            positionsTable.getItems().clear();
+            renderSavingsTable(currencyCombo.getValue());
             new Alert(Alert.AlertType.ERROR, "API error: " + e.getMessage()).showAndWait();
         }
     }
@@ -365,6 +392,124 @@ public class MainDashboard {
         whaleAlertsList.getItems().setAll(alerts);
     }
 
+    private void setupPositionsTable() {
+        typeCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getType()));
+        symbolCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getSymbol()));
+        quantityCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getQuantity()));
+        priceCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPrice()));
+        valueCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getValue()));
+        positionsTable.getItems().clear();
+    }
+
+    private void setupSavingsTable() {
+        savingsTitleLabel.setText(String.format("Savings Forecast (%.1f%% APR)", SAVINGS_ANNUAL_RATE * 100.0));
+        periodCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPeriod()));
+        interestCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getInterest()));
+        expectedCol.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getExpected()));
+        savingsTable.getItems().clear();
+    }
+
+    private void renderPositionsTable(Portfolio portfolio, Currency currency) {
+        List<PositionRow> rows = new ArrayList<>();
+        if (portfolio.getPositions() != null && !portfolio.getPositions().isEmpty()) {
+            for (Position position : portfolio.getPositions().values()) {
+                var asset = position.getAsset();
+                if (asset == null) continue;
+                String type = asset.isDivisible() ? "CRYPTO" : "STOCK";
+                double price = asset.isDivisible()
+                        ? priceProvider.getCryptoPrice(asset.getSymbol(), currency)
+                        : priceProvider.getStockPrice(asset.getSymbol(), currency);
+                double qty = position.getQuantity();
+                double value = qty * price;
+
+                rows.add(new PositionRow(
+                        type,
+                        asset.getSymbol(),
+                        String.format("%.4f", qty),
+                        String.format("%.2f %s", price, currency),
+                        String.format("%.2f %s", value, currency)
+                ));
+            }
+        } else {
+            rows.addAll(buildRowsFromTransactions(portfolio, currency));
+        }
+
+        rows.sort(Comparator.comparing(PositionRow::getSymbol));
+        positionsTable.getItems().setAll(rows);
+    }
+
+    private List<PositionRow> buildRowsFromTransactions(Portfolio portfolio, Currency currency) {
+        List<PositionRow> rows = new ArrayList<>();
+        if (portfolio.getTransactions() == null) return rows;
+
+        class TempPos {
+            String symbol;
+            boolean crypto;
+            double quantity;
+            TempPos(String symbol, boolean crypto) {
+                this.symbol = symbol;
+                this.crypto = crypto;
+            }
+        }
+
+        java.util.Map<String, TempPos> map = new java.util.HashMap<>();
+        for (Transaction tx : portfolio.getTransactions()) {
+            if (tx.getType() == null || tx.getAsset() == null) continue;
+            if (tx.getType() != TransactionType.BUY && tx.getType() != TransactionType.SELL) continue;
+            String symbol = tx.getAsset().getSymbol();
+            boolean crypto = tx.getAsset().isDivisible();
+            String key = symbol + "|" + (crypto ? "CRYPTO" : "STOCK");
+            TempPos temp = map.computeIfAbsent(key, k -> new TempPos(symbol, crypto));
+            double delta = tx.getType() == TransactionType.BUY ? tx.getQuantity() : -tx.getQuantity();
+            temp.quantity += delta;
+        }
+
+        for (TempPos temp : map.values()) {
+            if (temp.quantity <= 0) continue;
+            double price = temp.crypto
+                    ? priceProvider.getCryptoPrice(temp.symbol, currency)
+                    : priceProvider.getStockPrice(temp.symbol, currency);
+            double value = temp.quantity * price;
+            rows.add(new PositionRow(
+                    temp.crypto ? "CRYPTO" : "STOCK",
+                    temp.symbol,
+                    String.format("%.4f", temp.quantity),
+                    String.format("%.2f %s", price, currency),
+                    String.format("%.2f %s", value, currency)
+            ));
+        }
+        return rows;
+    }
+
+    private void renderSavingsTable(String currencyCode) {
+        Currency currency = getSelectedCurrency();
+        if (currencyCode != null) {
+            try {
+                currency = Currency.valueOf(currencyCode);
+            } catch (Exception ignored) {
+            }
+        }
+
+        double balanceUsd = AppState.get().getSavingAccount().getBalance();
+        double balance = CurrencyUtil.fromUsd(balanceUsd, currency);
+
+        double[] months = new double[]{0, 1, 3, 6, 12};
+        String[] labels = new String[]{"Today", "1M", "3M", "6M", "1Y"};
+
+        List<SavingsRow> rows = new ArrayList<>();
+        for (int i = 0; i < months.length; i++) {
+            double interest = balance * SAVINGS_ANNUAL_RATE * (months[i] / 12.0);
+            double expected = balance + interest;
+            rows.add(new SavingsRow(
+                    labels[i],
+                    String.format("%.2f %s", interest, currency),
+                    String.format("%.2f %s", expected, currency)
+            ));
+        }
+
+        savingsTable.getItems().setAll(rows);
+    }
+
     private Portfolio getSelectedPortfolio() {
         Portfolio selected = portfolioCombo.getValue();
         if (selected == null) {
@@ -434,5 +579,43 @@ public class MainDashboard {
             }
         }
         return invested;
+    }
+
+    private static class PositionRow {
+        private final String type;
+        private final String symbol;
+        private final String quantity;
+        private final String price;
+        private final String value;
+
+        private PositionRow(String type, String symbol, String quantity, String price, String value) {
+            this.type = type;
+            this.symbol = symbol;
+            this.quantity = quantity;
+            this.price = price;
+            this.value = value;
+        }
+
+        public String getType() { return type; }
+        public String getSymbol() { return symbol; }
+        public String getQuantity() { return quantity; }
+        public String getPrice() { return price; }
+        public String getValue() { return value; }
+    }
+
+    private static class SavingsRow {
+        private final String period;
+        private final String interest;
+        private final String expected;
+
+        private SavingsRow(String period, String interest, String expected) {
+            this.period = period;
+            this.interest = interest;
+            this.expected = expected;
+        }
+
+        public String getPeriod() { return period; }
+        public String getInterest() { return interest; }
+        public String getExpected() { return expected; }
     }
 }
